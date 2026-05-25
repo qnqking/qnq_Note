@@ -64,7 +64,7 @@ docker pull --platform=arm64
 
 **常用参数说明**：
 
-- `-d`：后台运行（分离模式）
+- `-d`：后台运行（分离模式）（docker run -d nginx ）
 - `-p 80:80`：端口映射（宿主机:容器）
 - `-v /host/path:/container/path`：绑定挂载
 - `-v volume_name:/container/path`：命名卷挂载
