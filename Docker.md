@@ -66,7 +66,7 @@ docker pull --platform=arm64
 | ------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
 | `-d`                | 后台运行容器（分离模式）       | `docker run -d nginx`  <br>启动 Nginx 容器并在后台运行                                                                                            |
 | `-p [宿主机端口]:[容器端口]` | 端口映射（宿主机:容器）       | `docker run -p 8080:80 nginx`  <br>将宿主机 8080 端口映射到容器 80 端口  <br>`docker run -p 127.0.0.1:5432:5432 postgres`  <br>仅允许本地访问数据库            |
-| `-v [宿主机路径]:[容器路径]` | 绑定挂载（目录映射）         | `docker run -v $(pwd)/data:/app/data nginx`  <br>将当前目录的 data 映射到容器内                                                                     |
+| `-v [宿主机路径]:[容器路径]` | 绑定挂载（目录映射）         | ` docker run -v C:/Users/QN544/data:/app/data nginx`  <br>将当前目录的 data 映射到容器内                                                            |
 | `-v [卷名]:[容器路径]`    | 命名卷挂载（Docker 管理存储） | `docker volume create mydata`  <br>`docker run -v mydata:/var/lib/mysql mysql`  <br>使用命名卷持久化 MySQL 数据                                   |
 | `-e KEY=VALUE`      | 传递环境变量             | `docker run -e MYSQL_ROOT_PASSWORD=secret mysql`  <br>设置 MySQL root 密码  <br>`docker run -e TZ=Asia/Shanghai nginx`  <br>设置时区            |
 | `--name [自定义名]`     | 指定容器名称             | `docker run --name my-nginx -d nginx`  <br>创建名为 my-nginx 的容器                                                                            |
