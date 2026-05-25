@@ -108,6 +108,9 @@ docker logs <容器> / docker logs -f <容器>
 
 # 查看容器详细信息
 docker inspect <容器>
+
+# 删除所有容器
+docker container prune -f
 ```
 
 **进入容器调试**：
