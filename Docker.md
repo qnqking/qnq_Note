@@ -24,8 +24,10 @@
 启用Windows功能
 ![](attachments/Pasted%20image%2020260525104603.png)
 ![503](attachments/Pasted%20image%2020260525104506.png)
-
-#### 三、镜像操作
+`wsl set default version 2`(WSL默认版本设置为2)
+`wsl --update --web-download`（安装WSL）
+#### 
+三、镜像操作
 
 bash
 
