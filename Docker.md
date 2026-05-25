@@ -22,7 +22,9 @@
 | **Windows** | 启用 WSL + 虚拟机平台 → 安装 Docker Desktop |
 | **Mac**     | 下载对应芯片安装包，安装过程最简单                  |
 启用Windows功能
-![](attachments/Pasted%20image%2020260525104603.png)![](attachments/Pasted%20image%2020260525104506.png)
+![](attachments/Pasted%20image%2020260525104603.png)
+![503](attachments/Pasted%20image%2020260525104506.png)
+
 #### 三、镜像操作
 
 bash
