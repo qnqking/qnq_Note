@@ -16,12 +16,13 @@
 
 表格
 
-|平台|关键步骤|
-|---|---|
-|**Linux**|访问 `get.docker.com` 复制命令执行即可|
-|**Windows**|启用 WSL + 虚拟机平台 → 安装 Docker Desktop|
-|**Mac**|下载对应芯片安装包，安装过程最简单|
-
+| 平台          | 关键步骤                               |
+| ----------- | ---------------------------------- |
+| **Linux**   | 访问 `get.docker.com` 复制命令执行即可       |
+| **Windows** | 启用 WSL + 虚拟机平台 → 安装 Docker Desktop |
+| **Mac**     | 下载对应芯片安装包，安装过程最简单                  |
+启用Windows功能
+![](attachments/Pasted%20image%2020260525104603.png)![](attachments/Pasted%20image%2020260525104506.png)
 #### 三、镜像操作
 
 bash
