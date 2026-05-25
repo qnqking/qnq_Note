@@ -62,19 +62,18 @@ docker pull --platform=arm64
 
 #### 四、容器操作（核心命令）
 
-**常用参数说明**：
-
-- `-d`：后台运行（分离模式）（docker run -d nginx ）
-- `-p 80:80`：端口映射（宿主机:容器）
-- `-v /host/path:/container/path`：绑定挂载
-- `-v volume_name:/container/path`：命名卷挂载
-- `-e KEY=VALUE`：传递环境变量
-- `--name xxx`：自定义容器名
-- `-it`：交互式终端
-- `--rm`：停止后自动删除（--rm -f强制删除)
-- `--restart always`：崩溃/断电自动重启
-- --restart unless-stopped：重启意外原因的容器，不重启手动停止
-- `--network xxx`：指定网络
+|参数|说明|示例|
+|---|---|---|
+|`-d`|后台运行容器（分离模式）|`docker run -d nginx`  <br>启动 Nginx 容器并在后台运行|
+|`-p [宿主机端口]:[容器端口]`|端口映射（宿主机:容器）|`docker run -p 8080:80 nginx`  <br>将宿主机 8080 端口映射到容器 80 端口  <br>`docker run -p 127.0.0.1:5432:5432 postgres`  <br>仅允许本地访问数据库|
+|`-v [宿主机路径]:[容器路径]`|绑定挂载（目录映射）|`docker run -v $(pwd)/data:/app/data nginx`  <br>将当前目录的 data 映射到容器内|
+|`-v [卷名]:[容器路径]`|命名卷挂载（Docker 管理存储）|`docker volume create mydata`  <br>`docker run -v mydata:/var/lib/mysql mysql`  <br>使用命名卷持久化 MySQL 数据|
+|`-e KEY=VALUE`|传递环境变量|`docker run -e MYSQL_ROOT_PASSWORD=secret mysql`  <br>设置 MySQL root 密码  <br>`docker run -e TZ=Asia/Shanghai nginx`  <br>设置时区|
+|`--name [自定义名]`|指定容器名称|`docker run --name my-nginx -d nginx`  <br>创建名为 my-nginx 的容器|
+|`-it`|交互式终端（通常组合使用）|`docker run -it ubuntu /bin/bash`  <br>进入 Ubuntu 容器的交互式 shell  <br>`docker run -it --rm alpine sh`  <br>临时运行 Alpine 并自动清理|
+|`--rm`|容器停止后自动删除|`docker run --rm -it python:3.9 python -c "print('Hello')"`  <br>执行完命令后自动清理容器|
+|`--restart [策略]`|重启策略|`docker run -d --restart always nginx`  <br>容器崩溃/系统重启后自动恢复  <br>`docker run -d --restart unless-stopped nginx`  <br>仅意外退出时重启（手动停止后不再启动）|
+|`--network [网络名]`|指定网络模式|`docker network create mynet`  <br>`docker run --network mynet --name app nginx`  <br>将容器加入自定义网络|
 
 **挂载卷对比**：
 
