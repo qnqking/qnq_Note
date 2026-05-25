@@ -26,8 +26,15 @@
 ![503](attachments/Pasted%20image%2020260525104506.png)
 `wsl set default version 2`(WSL默认版本设置为2)
 `wsl --update --web-download`（安装WSL）
-#### 
-三、镜像操作
+![](attachments/Pasted%20image%2020260525145103.png)
+配置Docker镜像
+```
+"registry-mirrors": [
+    "https://docker.1ms.run",
+    "https://docker.xuanyuan.me"
+  ]
+```
+#### 三、镜像操作
 
 bash
 
