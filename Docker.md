@@ -71,8 +71,9 @@ docker pull --platform=arm64
 - `-e KEY=VALUE`：传递环境变量
 - `--name xxx`：自定义容器名
 - `-it`：交互式终端
-- `--rm`：停止后自动删除
+- `--rm`：停止后自动删除（--rm -f强制删除)
 - `--restart always`：崩溃/断电自动重启
+- --restart unless-stopped：重启意外原因的容器，不重启手动停止
 - `--network xxx`：指定网络
 
 **挂载卷对比**：
