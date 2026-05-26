@@ -1,3 +1,5 @@
+# Docker 学习笔记
+
 #### 一、核心概念与架构
 
 **Docker vs 虚拟机**：容器共享宿主机内核，相比虚拟机更轻量、启动速度更快。
@@ -153,6 +155,35 @@ EXPOSE 8000
 CMD ["python", "main.py"]
 ```
 
+**Dockerfile 最佳实践**：
+
+- **多阶段构建**：分离构建环境和运行环境，减小最终镜像体积。
+- **利用层缓存**：先拷贝依赖文件再 copy 源码，避免重复安装依赖。
+- **使用 `.dockerignore`**：排除 `node_modules`、`.git` 等不需要的文件，减少构建上下文。
+- **非 root 用户运行**：`USER 1000` 提高安全性。
+- **最小化镜像层数**：合并 `RUN` 命令（用 `&&` 连接）。
+- **选择合适的基础镜像**：优先用 `alpine` 或 `slim` 版本减小体积。
+
+**多阶段构建示例**：
+
+```dockerfile
+# 构建阶段
+FROM maven:3.9-eclipse-temurin-21 AS build
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src ./src
+RUN mvn package -DskipTests
+
+# 运行阶段
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+USER 1000
+EXPOSE 8080
+CMD ["java", "-jar", "app.jar"]
+```
+
 **构建与推送流程**：
 
 bash
@@ -200,6 +231,31 @@ docker network rm network1
 - **优势**：自动创建共享子网，容器按 service 名互通，支持 `depends_on` 指定启动顺序。
 - **适用场景**：Docker Compose 适合单机/个人，企业集群级通常使用 Kubernetes。
 
+**compose.yml 示例**：
+
+```yaml
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+
+  db:
+    image: postgres:16
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: secret
+
+volumes:
+  pgdata:
+```
+
 **常用命令**：
 
 bash
@@ -220,7 +276,48 @@ docker compose stop / start
 docker compose -f custom.yml up
 ```
 
-#### 八、命令速查表
+#### 九、资源限制
+
+```bash
+# 限制内存和 CPU
+docker run -d --memory="512m" --cpus="1.5" nginx
+
+# 限制交换内存
+docker run -d --memory="1g" --memory-swap="2g" nginx
+
+# 查看容器资源使用情况
+docker stats
+```
+
+#### 十、健康检查 (HEALTHCHECK)
+
+```dockerfile
+# 在 Dockerfile 中定义
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+```
+
+```bash
+# 查看健康状态
+docker ps  # STATUS 列显示 healthy / unhealthy
+docker inspect --format='{{json .State.Health}}' <容器>
+```
+
+#### 十一、常见排错
+
+```bash
+# 磁盘空间不足 → 清理未使用的资源
+docker system prune -a
+
+# 查看容器退出原因
+docker logs <容器>
+docker inspect <容器> | grep -A 10 State
+
+# 查看 Docker 磁盘占用
+docker system df
+```
+
+#### 十二、命令速查表
 
 表格
 

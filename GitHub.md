@@ -1,4 +1,7 @@
-releases（在GitHub的项目链接后添加可以选择版本下载(https://github.com/chidiwilliams/buzz/releases)）
+# Git & GitHub 学习笔记
+
+releases（在 GitHub 的项目链接后添加 /releases 可以选择版本下载，例如：https://github.com/chidiwilliams/buzz/releases）
+
 ## 一句话先懂全局
 
 **Git** 是用来管理代码“历史版本”的工具，  
@@ -161,6 +164,54 @@ commit 的作用是：
 - 添加搜索功能
 
 作用是帮助你以后回看历史时，知道这次改了什么。
+
+---
+
+### 3.5 git status：查看当前状态
+
+这是最常用的 Git 命令之一，告诉你：
+- 哪些文件被修改了
+- 哪些文件在暂存区
+- 哪些文件没被跟踪
+
+```bash
+git status
+
+# 简短模式
+git status -s
+```
+
+### 3.6 git log：查看提交历史
+
+```bash
+# 查看完整历史
+git log
+
+# 紧凑模式
+git log --oneline
+
+# 图形化分支历史
+git log --oneline --graph --all
+
+# 查看最近 N 条
+git log -5
+```
+
+### 3.7 git diff：查看差异
+
+```bash
+# 工作区 vs 暂存区
+git diff
+
+# 暂存区 vs 最新 commit
+git diff --staged
+
+# 工作区 vs 最新 commit
+git diff HEAD
+
+# 比较两个分支
+git diff main..feature
+```
 
 ---
 
@@ -442,6 +493,61 @@ commit 之后，文件变化进入本地仓库。
 
 - 先把远端更新拿下来
 - 再合并到本地
+
+---
+
+### 9.4 git remote：管理远端仓库
+
+```bash
+# 查看已关联的远端仓库
+git remote -v
+
+# 添加远端仓库
+git remote add origin <url>
+
+# 修改远端地址
+git remote set-url origin <new-url>
+
+# 删除远端关联
+git remote remove origin
+```
+
+### 9.5 git tag：版本标签
+
+```bash
+# 创建轻量标签
+git tag v1.0.0
+
+# 创建附注标签（含说明）
+git tag -a v1.0.0 -m "第一个正式版本"
+
+# 推送标签到远端
+git push origin v1.0.0
+
+# 推送所有标签
+git push origin --tags
+
+# 列出所有标签
+git tag -l
+```
+
+### 9.6 Git 基本配置
+
+```bash
+# 设置用户名和邮箱（必须）
+git config --global user.name "你的名字"
+git config --global user.email "你的邮箱"
+
+# 设置默认分支名
+git config --global init.defaultBranch main
+
+# 查看当前配置
+git config --list
+
+# 配置文件位置
+# 全局：~/.gitconfig
+# 项目：.git/config
+```
 
 ---
 
@@ -828,3 +934,34 @@ Rebase 是更进阶的操作，中文常叫：
 
 只要你掌握了这些核心概念，  
 以后不管是自己开发、团队协作，还是参与开源项目，都会轻松很多。
+
+---
+
+## 19. 命令速查表
+
+| 操作 | 命令 |
+|------|------|
+| **初始化仓库** | `git init` |
+| **查看状态** | `git status` |
+| **查看历史** | `git log --oneline` |
+| **查看差异** | `git diff` |
+| **暂存文件** | `git add <file>` |
+| **提交** | `git commit -m "message"` |
+| **创建分支** | `git branch <name>` |
+| **切换分支** | `git checkout <name>` 或 `git switch <name>` |
+| **创建并切换** | `git checkout -b <name>` |
+| **合并分支** | `git merge <branch>` |
+| **克隆仓库** | `git clone <url>` |
+| **推送到远端** | `git push origin <branch>` |
+| **从远端拉取** | `git pull origin <branch>` |
+| **查看远端** | `git remote -v` |
+| **创建标签** | `git tag v1.0.0` |
+| **暂存修改** | `git stash` |
+| **恢复暂存** | `git stash pop` |
+| **撤销未提交修改** | `git checkout -- <file>` |
+| **回退到某 commit** | `git reset --hard <commit>` |
+| **反向提交** | `git revert <commit>` |
+| **挑取提交** | `git cherry-pick <commit>` |
+| **变基** | `git rebase <branch>` |
+| **配置用户名** | `git config --global user.name "name"` |
+| **配置邮箱** | `git config --global user.email "email"` |

@@ -1,4 +1,6 @@
-###  文档内容分区梳理
+###  # Java 后端开发知识图谱
+
+文档内容分区梳理
 
 #### 1. MySQL 数据库核心
 
@@ -188,3 +190,179 @@ _涉及设计模式、缓存、服务器配置等_
     - Servlet：单例多线程，非线程安全。
     - Session & Cookie：会话跟踪技术。
     - AJAX：异步JavaScript和XML，局部刷新。
+
+---
+
+#### 6. Spring Boot 专题
+
+_Spring Boot 是 Spring 生态的快速开发框架，核心是「约定大于配置」。_
+
+- **自动配置原理**：通过 `@SpringBootApplication`（包含 `@EnableAutoConfiguration`）根据 classpath 中的依赖自动配置 Bean。
+- **起步依赖 (Starter)**：一站式引入相关依赖，如 `spring-boot-starter-web`、`spring-boot-starter-data-jpa`。
+- **配置文件**：`application.yml` 或 `application.properties`，支持多环境配置（`application-dev.yml`）。
+- **内嵌服务器**：默认内嵌 Tomcat，也可切换为 Jetty 或 Undertow。
+- **Actuator**：提供生产级监控端点（`/health`、`/metrics`、`/env`）。
+- **常用注解**：`@SpringBootApplication`、`@RestController`、`@Configuration`、`@Value`。
+
+**常见集成**：
+- Spring Boot + MyBatis：`mybatis-spring-boot-starter`
+- Spring Boot + Redis：`spring-boot-starter-data-redis`
+- Spring Boot + JPA：`spring-boot-starter-data-jpa`
+- Spring Boot + Security：`spring-boot-starter-security`
+
+---
+
+#### 7. Maven 基础
+
+_Maven 是 Java 项目的主流构建和依赖管理工具。_
+
+- **pom.xml**：Maven 项目的核心配置文件，定义坐标（groupId、artifactId、version）、依赖、插件。
+- **依赖管理**：声明式引入依赖，Maven 自动下载传递依赖。
+- **生命周期**：`clean` → `compile` → `test` → `package` → `install` → `deploy`。
+- **常用命令**：
+
+```bash
+mvn clean           # 清理编译产物
+mvn compile         # 编译源码
+mvn test            # 运行测试
+mvn package         # 打包（jar/war）
+mvn install         # 安装到本地仓库
+mvn dependency:tree # 查看依赖树
+```
+
+- **依赖范围 (scope)**：`compile`（默认）、`provided`（运行时由容器提供）、`runtime`、`test`。
+- **Gradle 对比**：Gradle 基于 Groovy/Kotlin DSL，构建脚本更灵活，性能更好（增量构建、缓存），Android 项目默认使用。
+
+---
+
+#### 8. REST API 设计
+
+- **HTTP 方法语义**：
+  - `GET`：查询（幂等、安全）
+  - `POST`：创建
+  - `PUT`：全量更新（幂等）
+  - `PATCH`：部分更新
+  - `DELETE`：删除（幂等）
+- **状态码规范**：
+  - 200：成功
+  - 201：创建成功
+  - 204：删除成功（无返回体）
+  - 400：请求参数错误
+  - 401：未认证
+  - 403：无权限
+  - 404：资源不存在
+  - 500：服务器内部错误
+- **URL 设计**：资源名用复数（`/api/users`），层级关系清晰（`/api/users/{id}/orders`）。
+- **请求/响应**：统一返回格式（`{"code": 200, "data": {...}, "message": "ok"}`）。
+- **分页**：`/api/users?page=1&size=20`。
+
+---
+
+#### 9. 单元测试 (JUnit & Mockito)
+
+```java
+// JUnit 5 基本示例
+@Test
+void testAddition() {
+    assertEquals(4, 2 + 2);
+}
+
+// Mockito 模拟依赖
+@Mock
+private UserRepository userRepo;
+
+@InjectMocks
+private UserService userService;
+
+@Test
+void testFindUser() {
+    when(userRepo.findById(1L)).thenReturn(Optional.of(new User()));
+    User user = userService.getUser(1L);
+    assertNotNull(user);
+    verify(userRepo).findById(1L);
+}
+```
+
+- **JUnit 5 常用注解**：`@Test`、`@BeforeEach`、`@AfterEach`、`@DisplayName`、`@ParameterizedTest`。
+- **Mockito**：用于 mock 依赖，核心方法 `when().thenReturn()`、`verify()`。
+- **断言库**：JUnit 自带 `Assertions`，或使用 AssertJ（流式断言）。
+- **覆盖率**：建议核心业务逻辑达到 80% 以上。
+
+---
+
+#### 10. Redis 补充
+
+- **五种基本数据类型**：
+  - `String`：字符串，可存数字/JSON，支持计数器（`INCR`）
+  - `List`：链表，可做队列/栈，`LPUSH`/`RPOP`
+  - `Set`：无序集合，去重，交并差集操作
+  - `ZSet`：有序集合，按分数排序，适合排行榜
+  - `Hash`：键值对集合，适合存对象
+- **持久化机制**：
+  - **RDB**：定时快照，恢复快但可能丢最后一批数据
+  - **AOF**：记录每条写命令，数据更安全但文件更大
+  - 生产建议：两者同时开启
+- **淘汰策略**：`LRU`（最近最少使用）、`LFU`（最不经常使用）、`TTL`（过期时间）、随机。
+- **集群模式**：主从复制 → 哨兵模式 → Cluster 集群（数据分片）。
+
+---
+
+#### 11. Linux 补充
+
+- **文件权限**：
+
+```bash
+# 权限结构：rwx (读/写/执行) × 用户/用户组/其他
+chmod 755 file    # rwxr-xr-x
+chmod 644 file    # rw-r--r--
+chown user:group file
+```
+
+- **进程管理**：
+
+```bash
+ps aux            # 查看所有进程
+ps -ef | grep java
+kill -9 <PID>     # 强制终止进程
+systemctl start/stop/restart/status <服务名>
+```
+
+- **Shell 脚本基础**：
+
+```bash
+#!/bin/bash
+# 变量
+NAME="hello"
+# 条件判断
+if [ -f "/path/file" ]; then
+    echo "文件存在"
+fi
+# 循环
+for i in {1..5}; do
+    echo $i
+done
+```
+
+- **常用排查命令**：`top`（系统负载）、`df -h`（磁盘）、`free -h`（内存）、`netstat -tlnp`（端口）、`tail -f`（日志）。
+
+---
+
+#### 12. 安全与认证
+
+- **JWT (JSON Web Token)**：
+  - 结构：Header.Payload.Signature（三部分 Base64 编码）
+  - 无状态，适合分布式系统
+  - Access Token（短期）+ Refresh Token（长期）
+- **OAuth2**：
+  - 授权码模式（最安全）、密码模式、客户端模式、简化模式
+  - 第三方登录的核心协议
+- **Spring Security**：
+  - 过滤器链 + 认证（Authentication）+ 授权（Authorization）
+  - `SecurityFilterChain` 配置 URL 权限
+  - `PasswordEncoder`（推荐 BCrypt）
+  - `@PreAuthorize` 方法级权限控制
+- **常见攻击防护**：
+  - SQL 注入：使用参数化查询（MyBatis `#{}`）
+  - XSS：对输出进行 HTML 转义
+  - CSRF：Spring Security 默认开启 CSRF 保护
+  - CORS：配置跨域白名单
