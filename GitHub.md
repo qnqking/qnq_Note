@@ -4,19 +4,7 @@
 > - 文字版汇总笔记：[Git和GitHub是啥？咋用？一文吃透核心概念+AI实操](https://blog.csdn.net/2601_96073073/article/details/161258079)
 > - 资源汇总：https://github.com/tech-shrimp/me
 >
-> **免费视频清单**：
-> | 视频主题 | 链接 |
-> |---------|------|
-> | 永远不要使用 git pull | https://www.bilibili.com/video/BV1mcyyytex4/ |
-> | GitHub Actions 怎么用？ | https://www.bilibili.com/video/BV11e411i7xx/ |
-> | GitHub Pages 免费免服务器上线网站 | https://www.bilibili.com/video/BV12h4y1n7q4/ |
-> | GitHub 免费功能盘点（Action/Packages/LFS/Codespace） | https://www.bilibili.com/video/BV1agm6ylejl/ |
-> | GitHub Action+Pages 免费部署网站 | https://www.bilibili.com/video/BV1sb421n7cb/ |
-> | 仅需一个 GitHub 账号，文字在互联网中永生（Gmeek 博客） | https://www.bilibili.com/video/BV1gm4m1m7zd/ |
-> | 白嫖微信官方推送（GitHub Action 实战） | https://www.bilibili.com/video/BV1ng4y1r7ep/ |
-> | 免费容器部署平台 | https://www.bilibili.com/video/BV1zKVtzFEQH/ |
->
-> **核心理念（得意忘言）**：掌握了核心概念，具体命令不需要死记硬背。AI 时代，用自然语言指挥 AI 完成 Git 操作效率更高——但前提是你要理解 Git 的分区模型、分支、合并等核心概念。
+
 
 releases（在 GitHub 的项目链接后添加 /releases 可以选择版本下载，例如：https://github.com/chidiwilliams/buzz/releases）
 
