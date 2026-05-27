@@ -1,5 +1,13 @@
 # Git & GitHub 学习笔记
 
+> 📺 **参考课程**：
+> - **技术爬爬虾**《小白玩转Github/Git，全功能精讲》— [B站课堂](https://www.bilibili.com/cheese/play/ep1104982/)（35课时付费课程）
+> - 免费视频合集：B站搜索"技术爬爬虾" Git/GitHub 相关视频
+> - 文字版笔记：[Git和GitHub是啥？咋用？一文吃透核心概念+AI实操](https://blog.csdn.net/2601_96073073/article/details/161258079)
+> - 资源汇总：https://github.com/tech-shrimp/me
+>
+> **核心理念（得意忘言）**：掌握了核心概念，具体命令不需要死记硬背。AI 时代，用自然语言指挥 AI 完成 Git 操作效率更高——但前提是你要理解 Git 的分区模型、分支、合并等核心概念。
+
 releases（在 GitHub 的项目链接后添加 /releases 可以选择版本下载，例如：https://github.com/chidiwilliams/buzz/releases）
 
 ## 一句话先懂全局
@@ -965,3 +973,213 @@ Rebase 是更进阶的操作，中文常叫：
 | **变基** | `git rebase <branch>` |
 | **配置用户名** | `git config --global user.name "name"` |
 | **配置邮箱** | `git config --global user.email "email"` |
+
+---
+
+## 20. Git LFS（大文件存储）
+
+Git 不适合管理大文件（视频、模型、数据集等）。**Git LFS（Large File Storage）** 解决了这个问题——大文件本体存在 LFS 服务器上，仓库里只存指针。
+
+```bash
+# 安装 Git LFS
+git lfs install
+
+# 追踪特定文件类型
+git lfs track "*.psd"
+git lfs track "*.zip"
+git lfs track "*.mp4"
+
+# 追踪后 .gitattributes 会被更新，提交即可
+git add .gitattributes
+git commit -m "配置 Git LFS"
+
+# 之后正常使用即可
+git add large-file.psd
+git commit -m "添加大文件"
+git push
+```
+
+**适用场景**：游戏资源、AI 模型文件、视频/音频素材、大型数据集。
+
+---
+
+## 21. GitHub Actions（CI/CD 自动化）
+
+GitHub Actions 是 GitHub 内置的 CI/CD 引擎，可以在代码 push、PR、定时等事件触发自动任务。
+
+**核心概念**：
+- **Workflow**：自动化流程，定义在 `.github/workflows/*.yml`
+- **Job**：Workflow 中的一组任务，默认并行
+- **Step**：Job 中的每个执行步骤
+- **Action**：可复用的步骤单元（社区市场有大量现成的）
+
+```yaml
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Build Docker image
+        run: docker build -t myapp .
+
+      - name: Push to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag myapp username/myapp:latest
+          docker push username/myapp:latest
+```
+
+**常见用途**：
+- 自动运行测试
+- 自动构建 & 发布
+- 自动部署到服务器
+- 定时任务（cron 触发）
+- Docker 镜像构建 & 推送
+
+---
+
+## 22. GitHub Pages（免费静态网站）
+
+GitHub Pages 可以将仓库直接发布为静态网站，完全免费，支持自定义域名。
+
+```bash
+# 方式一：个人/组织站点
+# 仓库名必须为：<username>.github.io
+# 直接推送到 main 分支，访问 https://<username>.github.io
+
+# 方式二：项目站点
+# 任意仓库 → Settings → Pages → 选择分支和目录 → Save
+# 访问 https://<username>.github.io/<repo-name>
+
+# 支持的静态站点生成器（自动构建）
+# Jekyll（默认）、Hugo、Hexo、VuePress 等
+```
+
+**适用场景**：个人博客、项目文档、技术作品集、产品 Landing Page。
+
+---
+
+## 23. GitHub Desktop（图形化客户端）
+
+对于不习惯命令行的初学者，GitHub Desktop 提供了可视化操作界面：
+
+- 克隆仓库、创建分支
+- 查看 diff（变更对比）
+- 提交和推送
+- 分支合并
+- 解决冲突（图形化冲突编辑器）
+- 管理 Pull Request
+
+> 技术爬爬虾课程中推荐新手从 GitHub Desktop 入门——先用 GUI 理解 Git 工作流，再逐步过渡到命令行。
+
+下载：https://desktop.github.com
+
+---
+
+## 24. GitHub 高级功能速览
+
+### Webhook
+
+当仓库发生特定事件时，GitHub 向你的服务器发送 HTTP POST 通知：
+
+```bash
+# 常见触发事件：push、PR、issue、release
+# 用途：自动部署、通知机器人、触发 CI
+```
+
+### REST API
+
+GitHub 提供完整的 REST API，可以程序化管理仓库：
+
+```bash
+# 获取仓库信息
+curl https://api.github.com/repos/owner/repo
+
+# 创建 Issue
+gh issue create --title "Bug report" --body "描述..."
+
+# 查看 PR 列表
+gh pr list
+```
+
+### GitHub CLI（`gh` 命令）
+
+```bash
+# 安装后登录
+gh auth login
+
+# 创建仓库
+gh repo create my-project --public
+
+# 创建 PR
+gh pr create --title "修复登录bug" --body "修复了..."
+
+# 查看 Issues
+gh issue list
+```
+
+### 安全功能
+
+| 功能 | 说明 |
+|------|------|
+| **Dependabot** | 自动检测依赖漏洞并提 PR 更新 |
+| **Code Scanning** | 代码安全扫描（基于 CodeQL） |
+| **Secret Scanning** | 检测是否误提交了密钥/Token |
+| **Security Policy** | `SECURITY.md` 文件，告知如何报告漏洞 |
+
+---
+
+## 25. AI 时代学 Git 的正确姿势（技术爬爬虾方法论）
+
+核心理念：**得意忘言** —— 掌握核心概念，命令交给 AI。
+
+1. **理解概念比背命令重要 100 倍**：AI 可以帮你执行具体命令，但只有你理解"为什么这样做"才能正确指挥 AI
+2. **用自然语言和 AI 协作**：
+   > "帮我把当前改动提交到 feature 分支，然后推送到 GitHub，commit message 写'添加搜索功能'"
+3. **让 AI 处理复杂操作**：解决冲突、rebase 整理历史、cherry-pick 等
+4. **AI 是安全带，不是自动驾驶**：每次 AI 操作前先看 diff，确认无误再执行
+5. **Claude Code / Copilot 等工具底层全是 Git**：理解 Git 才能更好地利用这些 AI 编程工具
+
+---
+
+## 26. 课程内容对照（技术爬爬虾 vs 本文）
+
+| 技术爬爬虾课程模块 | 本文对应章节 |
+|--------------------|------------|
+| Git/GitHub 基础概念 | 第 1~8 节 |
+| GitHub 网站操作 | 第 10 节 |
+| Git 四分区模型 | 第 8 节 |
+| GitHub Desktop | 第 23 节 |
+| 分支合并与冲突解决 | 第 5、12 节 |
+| IDE 中使用 Git | —（另见 IDE 相关笔记） |
+| Git 命令行 | 第 19 节 命令速查表 |
+| GitHub Actions | 第 21 节 |
+| GitHub Pages | 第 22 节 |
+| Git LFS | 第 20 节 |
+| Webhook / REST API | 第 24 节 |
+| 安全功能 | 第 24 节 |
+| AI 辅助 Git 操作 | 第 25 节 |
