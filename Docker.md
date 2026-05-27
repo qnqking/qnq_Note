@@ -1,5 +1,10 @@
 # Docker 学习笔记
 
+> 📺 **参考课程**：
+> - **技术爬爬虾**《40分钟的Docker实战攻略，一期视频精通Docker》— [B站 BV1THKyzBER6](https://www.bilibili.com/video/BV1THKyzBER6/)
+> - GitHub 配套资料：https://github.com/tech-shrimp/docker_installer
+> - UP主 GitHub：https://github.com/tech-shrimp
+
 #### 一、核心概念与架构
 
 **Docker vs 虚拟机**：容器共享宿主机内核，相比虚拟机更轻量、启动速度更快。
@@ -60,6 +65,12 @@ docker pull --platform=arm64
 
 # 镜像站配置
 # 国内网络需配置 registry-mirrors 解决下载慢问题。
+
+# 导出镜像（离线传输）
+docker save -o nginx.tar nginx:latest
+
+# 导入镜像
+docker load -i nginx.tar
 ```
 
 #### 四、容器操作（核心命令）
@@ -153,6 +164,30 @@ EXPOSE 8000
 
 # 容器启动默认命令
 CMD ["python", "main.py"]
+```
+
+**ADD vs COPY**：
+
+| 指令 | 行为 | 使用场景 |
+|------|------|----------|
+| `COPY . .` | 仅复制本地文件到镜像 | 普通拷贝源码/文件（**推荐**） |
+| `ADD . .` | 复制 + 自动解压 tar / 支持 URL 下载 | 需要自动解压压缩包时使用 |
+
+**ENTRYPOINT vs CMD**：
+
+| | `CMD` | `ENTRYPOINT` |
+|---|---|---|
+| 作用 | 指定默认命令和参数 | 指定不可变的主命令 |
+| 运行时覆盖 | `docker run <img> <cmd>` 完全替换 | `<cmd>` 作为参数追加 |
+| 组合使用 | 为 ENTRYPOINT 提供默认参数 | 固定主程序，CMD 设默认参数 |
+
+```dockerfile
+# CMD：可用 docker run <img> /bin/bash 覆盖
+CMD ["python", "main.py"]
+
+# ENTRYPOINT：docker run <img> --help → python main.py --help
+ENTRYPOINT ["python", "main.py"]
+CMD ["--port", "8080"]
 ```
 
 **Dockerfile 最佳实践**：
@@ -276,7 +311,52 @@ docker compose stop / start
 docker compose -f custom.yml up
 ```
 
-#### 九、资源限制
+#### 八、Portainer（图形化管理）
+
+Portainer 是轻量级容器管理 UI，也支持 K8s：
+
+```bash
+# 部署 Portainer（数据卷持久化）
+docker volume create portainer_data
+docker run -d \
+  -p 8000:8000 -p 9443:9443 \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  --restart=always \
+  --name portainer \
+  portainer/portainer-ce:latest
+
+# 访问 https://<宿主机IP>:9443
+```
+
+#### 九、镜像转存方案（国内网络优化）
+
+技术爬爬虾提供的思路：通过 GitHub Action 将 DockerHub 镜像转存到阿里云私有仓库，解决国内无法拉取的问题。
+
+```bash
+# 原理流程
+# DockerHub 镜像 → GitHub Action 拉取 → 推送到阿里云容器镜像仓库 → 国内服务器拉取
+
+# 登录阿里云容器镜像服务
+docker login --username=<阿里云账号> registry.cn-hangzhou.aliyuncs.com
+
+# 从阿里云拉取转存后的镜像
+docker pull registry.cn-hangzhou.aliyuncs.com/<命名空间>/<镜像名>:<tag>
+```
+
+详见：[tech-shrimp/docker_installer](https://github.com/tech-shrimp/docker_installer)
+
+#### 十、AI 辅助学习 Docker
+
+技术爬爬虾课程中强调的学习方法：
+
+- **用 AI 解释命令**：遇到不懂的参数，直接问 AI（如 `docker run -p 8080:80 --restart always` 是什么意思？）
+- **用 AI 生成 Dockerfile**：描述你的项目结构 → AI 生成 Dockerfile → 人工检查优化
+- **用 AI 生成 Compose 文件**：描述多服务架构 → AI 生成 compose.yml
+- **用 AI 排查错误**：把报错信息直接贴给 AI，快速定位问题
+- **注意事项**：AI 生成的配置可能有误，务必理解每个指令后再使用，不要盲目复制粘贴
+
+#### 十一、资源限制
 
 ```bash
 # 限制内存和 CPU
@@ -289,7 +369,7 @@ docker run -d --memory="1g" --memory-swap="2g" nginx
 docker stats
 ```
 
-#### 十、健康检查 (HEALTHCHECK)
+#### 十二、健康检查 (HEALTHCHECK)
 
 ```dockerfile
 # 在 Dockerfile 中定义
@@ -303,7 +383,7 @@ docker ps  # STATUS 列显示 healthy / unhealthy
 docker inspect --format='{{json .State.Health}}' <容器>
 ```
 
-#### 十一、常见排错
+#### 十三、常见排错
 
 ```bash
 # 磁盘空间不足 → 清理未使用的资源
@@ -317,7 +397,7 @@ docker inspect <容器> | grep -A 10 State
 docker system df
 ```
 
-#### 十二、命令速查表
+#### 十四、命令速查表
 
 表格
 
