@@ -1,9 +1,9 @@
-# Kubernetes 一小时轻松入门
+# Kubernetes
 
 > 📺 B站课程：GeekHour《Kubernetes一小时轻松入门》
 > 🔗 https://www.bilibili.com/video/av237678655/
 > 📝 官方笔记：https://geekhour.net/2023/12/23/kubernetes/
-> 📦 资料下载：公众号 **GeekHour** 回复 `k8s`
+
 
 ---
 

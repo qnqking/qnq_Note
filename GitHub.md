@@ -1161,23 +1161,3 @@ gh issue list
 3. **让 AI 处理复杂操作**：解决冲突、rebase 整理历史、cherry-pick 等
 4. **AI 是安全带，不是自动驾驶**：每次 AI 操作前先看 diff，确认无误再执行
 5. **Claude Code / Copilot 等工具底层全是 Git**：理解 Git 才能更好地利用这些 AI 编程工具
-
----
-
-## 26. 课程内容对照（技术爬爬虾 vs 本文）
-
-| 技术爬爬虾课程模块 | 本文对应章节 |
-|--------------------|------------|
-| Git/GitHub 基础概念 | 第 1~8 节 |
-| GitHub 网站操作 | 第 10 节 |
-| Git 四分区模型 | 第 8 节 |
-| GitHub Desktop | 第 23 节 |
-| 分支合并与冲突解决 | 第 5、12 节 |
-| IDE 中使用 Git | —（另见 IDE 相关笔记） |
-| Git 命令行 | 第 19 节 命令速查表 |
-| GitHub Actions | 第 21 节 |
-| GitHub Pages | 第 22 节 |
-| Git LFS | 第 20 节 |
-| Webhook / REST API | 第 24 节 |
-| 安全功能 | 第 24 节 |
-| AI 辅助 Git 操作 | 第 25 节 |
