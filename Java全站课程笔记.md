@@ -22,6 +22,12 @@
 
 ### 第二周：计算机网络 & 虚拟平台
 
+#### OS发展史
+1. 20世纪40年代：第1台计算机出现，无OS，程序员直接跟硬件交互
+2. 20世纪50年代：出现"单通道批处理操作系统"
+3. 20世纪60年代：出现"多通道批处理操作系统"
+4. 20世纪70年代：出现"多核多通道批处理操作系统"（Windows/Unix/DOS/Mac/Linux）
+
 #### 互联网概念
 - **internet（互联网）**：描述计算机之间如何进行互联
 - **Internet（因特网）**：描述全球电脑应该如何通讯
@@ -91,6 +97,11 @@
 | `cp -r` | 复制 |
 | `mv` | 移动/重命名 |
 | `touch` | 创建空文件 |
+
+**touch 进阶**：
+```bash
+touch -d '2024-12-12 09:10:10' supermanstars    # 创建文件并指定时间戳
+```
 | `wc -l -w -c` | 统计行数/单词/字节 |
 
 #### 关机重启
@@ -107,6 +118,13 @@
 | `du -s -h` | 查看目录使用情况 |
 | `lsblk` | 查看磁盘分配 |
 | `df` | 查看文件系统磁盘使用 |
+| `help` | 查看本地帮助文档 |
+
+#### dd命令（创建指定大小文件）
+```bash
+# 参数：if=输入设备 of=输出位置 bs=每次大小 count=次数
+dd if=/dev/zero of=a.txt bs=1M count=5    # 创建5M的文件
+```
 
 ---
 
@@ -158,7 +176,7 @@
 |------|------|
 | `cat` / `tac` | 一次性输出全部（正序/倒序） |
 | `more` | 分页，空格翻页，回车逐行，q退出 |
-| `less` | 分页，pgUp/pgDn翻页，支持搜索 |
+| `less` | 分页，pgUp/pgDn翻页，支持搜索（`less -N` 显示行号） |
 | `head -n` | 查看前n行 |
 | `tail -n` | 查看后n行 |
 
@@ -240,7 +258,23 @@ userdel -r -f 用户名               # 删除（-r删家目录 -f强制）
 
 **用户分类**：超级用户(root)、系统用户(/sbin/nologin)、普通用户(/bin/bash)
 
-**账号切换**：`su 用户名` / `whoami` / `logout`
+**账号切换与查看**：
+```bash
+su 用户名              # 切换账号
+whoami                 # 查看当前用户
+users / who            # 查看在线用户
+last                   # 查看历史登录
+logout                 # 退出客户端
+id 用户名              # 查看某个账号的详细信息
+```
+
+**passwd文件格式解读**：
+```
+root:x:0:0:root:/root:/bin/bash
+用户名:密码占位符:用户ID:用户组ID:描述:家目录:解释器
+```
+- 超级用户/普通用户解释器：`/bin/bash`
+- 系统用户解释器：`/sbin/nologin`
 
 #### 权限系统
 **ll 输出解读**：`drwxr-xr-x`
@@ -287,6 +321,23 @@ yum remove -y 软件名           # 卸载
 rpm -ql 软件名                 # 查看安装位置
 ```
 
+**RPM 详细选项**：
+| 选项 | 作用 |
+|------|------|
+| `rpm -qa` | 列出所有已安装的软件 |
+| `rpm -qi` | 查看软件详细信息 |
+| `rpm -qc` | 仅列出配置文件 |
+| `rpm -qd` | 仅列出文档文件 |
+| `rpm -qf 文件路径` | 查询文件属于哪个软件包 |
+
+**YUM源切换（CentOS 7 → 阿里云）**：
+```bash
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+curl -o /etc/yum.repos.d/CentOS-Base.repo https://mirrors.aliyun.com/repo/Centos-7.repo
+yum makecache
+yum install -y vim
+```
+
 #### 服务器管理
 **Tomcat**：
 ```bash
@@ -302,8 +353,15 @@ firewall-cmd --list-all                 # 查看端口
 
 **端口查看**：
 ```bash
+# 参数说明：-t TCP -u UDP -n 数字方式显示 -l 运行状态 -p 进程ID
+yum install -y net-tools          # 先安装网络工具
 netstat -tunlp | grep 端口号
 ss -tunlp | grep 8080
+```
+
+**查看系统服务**：
+```bash
+systemctl list-units --type service -all
 ```
 
 **进程管理**：
@@ -314,6 +372,10 @@ top                 # 查看进程
 
 #### Nginx 服务器
 **作用**：Web服务器、反向代理、缓存、负载均衡、TCP/UDP代理、邮件代理
+
+**正向代理 vs 反向代理**：
+- **正向代理**：从内向外代理（客户端通过代理访问外部资源）
+- **反向代理**：从外向内代理（外部请求通过代理访问内部服务，隐藏内部细节）
 
 **负载均衡算法**：
 1. 轮询 — 按顺序逐一分配
@@ -328,11 +390,18 @@ top                 # 查看进程
 ## 第二阶段：JAVA 基础
 
 ### Java 发展历程
-- 计算机语言：二进制 → 汇编 → 高级编程（结构化C → 面向对象C++/Java/Python/C#）
+- 计算机语言发展：二进制 → 汇编 → 高级编程（结构化C → 面向对象C++ → Java → C#）
+- Java整合了C++、A语言、Lisp语言
+- 1993年电视机顶盒项目完成但无市场，团队转行互联网做软件
 - Java之父：James Gosling（高司令）
-- 起源于1991年SUN公司Green小组 → 电视机顶盒项目
+- Java起源于1991年SUN公司Green小组 → 电视机顶盒项目（智能家居）
 - 1995年5月23日正式诞生（约30年）
-- Java语言特征：**跨平台、面向对象、简单、高性能、自带GC、支持多线程、异常处理**
+- Java语言特征：**跨平台、面向对象、简单、高性能、自带GC回收机制、支持多线程、支持异常处理、健壮性**
+
+### Java项目结构
+- **src**：存放源代码文件（程序员用自然语言编写的代码）
+- **out**：存放字节码文件（编译器翻译过后的机器代码）
+- 源代码 → 编译器翻译 → 字节码(.class文件)
 
 ### 环境变量
 ```
@@ -445,6 +514,30 @@ switch(变量) {
 ```
 - 无参/有参 × 无返回/有返回 = 4种组合
 - 函数：提供特殊功能的方法，封装内部细节
+- **无参**：无条件帮你做事情 / **有参**：有条件帮你做事情
+- **有返回**：做完需要汇报 / **无返回**：做完不需要汇报
+
+### 栈（Stack）
+- 遵循 **FILO**（First In Last Out，先进后出）的数据结构
+- Java中方法调用就是基于栈结构
+
+### 常用API函数
+| 函数 | 作用 |
+|------|------|
+| `Arrays.toString()` | 打印数组内容 |
+| `Integer.parseInt()` | 字符串转整数 |
+| `str.equals()` | 比较字符串内容 |
+| `str.contains()` | 是否包含子串 |
+| `str.startsWith()` | 是否以……开头 |
+| `str.endsWith()` | 是否以……结尾 |
+
+### toString()
+- `toString()` 是 Object 类的方法
+- 程序员不满足于打印内存地址，需要重写以看到对象属性值
+
+### 面试题：基本数据类型 vs 引用数据类型
+- 基本数据类型太简单，只能存放简单数值
+- 引用数据类型相对复杂，可以存放复杂数据（对象、集合等）
 
 ### 面向对象（OOP）
 
@@ -473,11 +566,12 @@ switch(变量) {
 #### 类的加载
 - 每个类只加载1次
 - 静态成员在类加载期间准备好，实例成员在运行期间创建
+- **调用方式**：`类名.静态成员` / `对象.实例成员`
 
 #### 构造器
 - 无参构造器：编译器在编译期间自动生成
-- 执行步骤：new创建对象 → 属性分配空间 → 赋初始值 → （有参构造器）执行剩余代码
-- **加有参之前，必须先加无参构造器**
+- 执行步骤：new创建对象 → 属性分配空间 → 赋初始值(0/null) → （有参构造器）执行剩余代码
+- **加有参构造器之前，必须先加无参构造器**
 
 #### 四大特征封装
 
@@ -549,13 +643,27 @@ Twitter提出的分布式唯一ID生成算法：
 | 下标 | 有 | 无 |
 | 重复 | 不去重 | 去重 |
 
-#### ArrayList vs LinkedList
-| 特性 | ArrayList | LinkedList |
-|------|-----------|------------|
-| 底层 | 数组 | 双向链表 |
-| 查询 | 快（有下标） | 慢 |
-| 插入/删除 | 慢（需移位） | 快 |
-| 线程安全 | 不安全 | 不安全 |
+#### ArrayList vs LinkedList vs Vector
+| 特性 | ArrayList | LinkedList | Vector |
+|------|-----------|------------|--------|
+| 底层 | 数组 | 双向链表 | 数组 |
+| 查询 | 快（有下标） | 慢 | 快 |
+| 插入/删除 | 慢（需移位） | 快 | 慢 |
+| 线程安全 | 不安全 | 不安全 | 安全（已少用） |
+
+#### 线程安全 vs 线程非安全
+- **线程安全**：多线程下，同一时刻只能有1根线程操作数据 → 效率低，但数据一致
+- **线程非安全**：允许多根线程同时操作相同数据 → 效率高，但数据可能不一致
+
+#### 迭代器
+- 集合遍历手段，特点：**边遍历，边删除数据**
+
+#### HashSet vs TreeSet
+| 特性 | HashSet | TreeSet |
+|------|---------|---------|
+| 底层 | HashMap的Key（Hash表） | 红黑二叉树 |
+| 去重规则 | hashCode() + equals() | 比较器 |
+| 排序 | 无序，不可自定义 | 有序，可自定义比较器
 
 #### HashSet去重原理（底层 = HashMap的Key）
 1. 通过Key的 `hashCode()` 得hash值，按 `(n-1) & hash` 得下标
@@ -576,7 +684,14 @@ Twitter提出的分布式唯一ID生成算法：
 - Java8前：数组 + 单向链表
 - Java8后：数组 + 单向链表 + 红黑二叉树
 - KEY去重：hashCode() + equals()
-- 线程非安全
+- 线程非安全，允许null键值
+
+#### HashMap vs Hashtable vs ConcurrentHashMap
+| 特性 | HashMap | Hashtable | ConcurrentHashMap |
+|------|---------|-----------|-------------------|
+| 线程安全 | 不安全 | 安全（方法同步） | 安全 |
+| null键值 | 允许 | 不允许 | 不允许 |
+| 性能 | 高 | 低（已淘汰） | 高（JDK8用CAS+synchronized） |
 
 #### Map体系特点
 - 双列集合，Key-Value
@@ -602,6 +717,8 @@ Twitter提出的分布式唯一ID生成算法：
 5. **依赖倒置原则**：面向接口编程
 6. **接口隔离原则**：接口最小化
 7. **组合聚合原则**：多用组合少用继承
+
+> 7大设计原则 → 23种设计模式。设计原则是大纲/思想（指导意义），设计模式是方式/方法（实战意义）。常用设计模式：工厂方法模式、单例模式、代理模式、适配器模式……
 
 ---
 
@@ -700,7 +817,9 @@ CustomerEntity.class;
 - 线程池
 
 #### 线程生命周期
-创建 → 就绪 → 运行 → 阻塞 → 运行 → 死亡
+**Java标准状态**：NEW → RUNNABLE → BLOCKED → WAITING → TIMED_WAITING → TERMINATED
+
+**通俗理解**：创建 → 就绪 → 运行 → 阻塞 → 运行 → 死亡
 
 **CPU调度算法**：
 - 分时调度：按时间片随机分配
@@ -754,11 +873,78 @@ public static JdbcTemplate getInstance() {
 3. 无限期等待
 4. 一直保持死锁状态
 
+#### synchronized 用法 & 面试题
+```java
+// 同步代码块
+synchronized(this) { ... }        // 锁当前对象
+synchronized(类.class) { ... }    // 锁类的Class对象
+synchronized(obj) { ... }         // 锁任意对象
+
+// 同步方法
+public synchronized void method() { ... }
+```
+- synchronized 特点：非公平锁、可重入、不可剥夺、互斥/排他
+
+#### volatile
+- 保证可见性
+- 禁止指令重排
+- **不保证原子性**（需要 synchronized 或 Lock 来保证）
+
+#### ThreadLocal
+- 线程局部变量，每个线程有独立副本
+- 应用场景：数据库连接管理、用户信息传递
+
+#### 守护线程
+- 为其他线程服务（如GC垃圾回收）
+- 主线程结束则守护线程自动终止
+
+#### 线程池
+- `es.execute()`：只能提交 Runnable 任务
+- `es.submit()`：既可提交 Runnable 任务，又可提交 Callable 任务
+
+#### 面试题：主线程中有10根子线程
+- 2根需要知道运行结果 → 使用 **Callable** 定义
+- 其余8根 → 使用 **Runnable** 定义
+- 统一交给 **线程池** 管理
+
+---
+
+### JVM 虚拟机基础
+
+#### 内存区域
+| 区域 | 共享性 | 说明 |
+|------|--------|------|
+| 方法区 | 线程共享 | 存储类信息、常量、静态变量 |
+| 堆 | 线程共享 | 存储对象实例和数组 |
+| 虚拟机栈 | 线程独享 | 存储局部变量、方法调用（栈帧） |
+| 本地方法栈 | 线程独享 | 为Native方法服务 |
+| 程序计数器 | 线程独享 | 记录当前线程执行位置 |
+
+#### 类加载
+- 双亲委派模型
+
+#### GC 垃圾回收
+- `finalize()` 方法在回收前可能调用（不推荐使用）
+
 ---
 
 ### Java 8 日期 API
 - **之前**：Date（方法过时、不支持国际化）、Calendar
 - **之后**：LocalDate / LocalTime / LocalDateTime
+
+---
+
+### BigDecimal
+- 对应数据库中 `decimal` 数据类型
+- 特点：可以精确控制小数点后的位数
+- 比较用 `compareTo()`，推荐用 String 构造器
+
+### SimpleDateFormat
+- 非线程安全，建议使用 `ThreadLocal` 或 Java 8 的 `java.time` 包
+
+### File & Socket
+- `File`：文件操作类
+- `Socket`：网络编程类
 
 ---
 
@@ -773,7 +959,8 @@ public static JdbcTemplate getInstance() {
 
 #### Stream流
 - 处理数据的流水线（与IO流概念不同）
-- 作用：过滤、转换、统计、排序、采集……
+- 常用API：过滤、转换、统计、排序、采集……
+- 集合的作用是**装数据**，Stream流的作用是**处理数据**
 
 **两种流**：
 - `list.stream()` — 串行流（按顺序执行）
@@ -858,6 +1045,8 @@ docker run --name mysql01 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=150316 -d 镜像ID
 
 ### DDL（数据定义语言）— 建库建表
 
+> 常见字符编码集：UTF-8、GBK、GB2312、utf8mb4
+
 #### 数据库操作
 ```sql
 CREATE DATABASE [IF NOT EXISTS] 数据库名 CHARACTER SET utf8mb4;
@@ -909,6 +1098,14 @@ TRUNCATE TABLE 表名;                   -- 清空表，重置自增，不可回
 | 默认 | DEFAULT 值 | 未输入时使用默认值 |
 | 外键 | FOREIGN KEY | 建立表关系 |
 
+#### 外键约束语法
+```sql
+ALTER TABLE 子表名
+ADD CONSTRAINT 外键名 FOREIGN KEY (外键列)
+REFERENCES 主表名(主键)
+[ON DELETE action ON UPDATE action];
+```
+
 > 优秀设计者：使用外键，但不使用外键约束（由程序保证关系正确性）
 
 ---
@@ -941,10 +1138,12 @@ FROM 表名
 #### 聚合函数
 | 函数 | 作用 |
 |------|------|
-| `COUNT()` | 统计条数 |
+| `COUNT(*)` / `COUNT(1)` | 统计总条数 |
+| `COUNT(字段)` | 统计非NULL值的条数 |
 | `SUM()` | 求和 |
 | `AVG()` | 平均数 |
 | `MAX()` / `MIN()` | 最大/最小值 |
+| `IFNULL(字段, 默认值)` | 处理NULL值 |
 
 #### 字符串函数
 `UPPER()` / `LOWER()` / `CONCAT()` / `TRIM()` / `SUBSTR()` / `LENGTH()` / `REPLACE()`
@@ -959,6 +1158,23 @@ FROM 表名
 - **内联查**（INNER JOIN）
 - **左外联查**（LEFT JOIN）
 - **右外联查**（RIGHT JOIN）
+
+#### 分组查询
+```sql
+-- 基本分组
+SELECT 字段, COUNT(*) FROM 表 GROUP BY 分组字段;
+
+-- 复合分组：分组之后，在每个组内部再次分组
+
+-- HAVING：将聚合过后的结果，再次过滤
+-- WHERE 在分组前行级过滤，HAVING 在分组后聚合过滤
+```
+
+---
+
+### DCL（数据控制语言）— 账号权限管理
+- 管理数据库账号
+- 划分用户权限
 
 ---
 
@@ -1096,6 +1312,10 @@ END;
 
 **浮动**：让块级标签共享一行
 
+**表格标签**：`<table>` / `<tr>`（行）/ `<th>`（表头）/ `<td>`（单元格）
+
+**头部标签**：`<head>` 定义文档属性和链接外部资源
+
 **列表**：有序列表、无序列表、自定义列表
 
 ---
@@ -1111,7 +1331,8 @@ END;
 | 变量提升 | 提升+初始化undefined | 提升但访问报错 |
 | 重复声明 | 允许 | 不允许 |
 
-#### JS作用
+#### DOM（文档对象模型）
+JS 三大作用：
 1. 修改网页内容
 2. 修改网页样式
 3. 通过事件触发函数
@@ -1176,6 +1397,28 @@ END;
 | session | 单次HttpSession会话 | 相对长，默认30分钟 |
 | application(ServletContext) | 跟Tomcat同步 | 最长 |
 
+#### HTTP通讯协议
+**请求协议**：
+- 请求行：提交方法、请求路径、协议版本
+- 请求头：浏览器给后端服务器的信息
+- 空行：分隔请求头和请求体
+- 请求体：携带的数据
+
+**响应协议**：
+- 响应行：协议版本、状态码、状态码描述
+- 响应头：后端服务器响应给浏览器的关键信息
+- 空行：分隔响应头和响应体
+- 响应体：返回前端的数据或页面
+
+**状态码**：
+| 范围 | 含义 |
+|------|------|
+| 100+ | 后端收到请求，但未处理完毕 |
+| 200+ | 后端已处理完毕（成功） |
+| 300+ | 后端无法处理，可指向其他路径 |
+| 400+ | 前端错误（如404资源不存在） |
+| 500+ | 后端错误（服务器内部错误） |
+
 #### HTTP提交方式
 | 方法 | 场景 | 特点 |
 |------|------|------|
@@ -1189,6 +1432,14 @@ END;
 2. GET只能文本 / POST可传输二进制
 3. GET受URL长度限制 / POST理论上无限
 4. GET会被缓存 / POST不会 → POST更安全
+
+#### @WebServlet 注解
+- JavaEE 4.0起推荐使用注解替代 web.xml
+- 约定优于配置
+```java
+@WebServlet(urlPatterns = "/login")
+public class LoginServlet extends HttpServlet { ... }
+```
 
 #### 请求转发 vs 重定向
 - **请求转发**：浏览器1次请求，服务器内部转发
@@ -1206,9 +1457,25 @@ END;
 ${属性}  // 获取顺序：pageContext → request → session → ServletContext
 ```
 
+#### JSP 脚本程序
+- 在JSP页面中内嵌Java代码
+
 #### JSP 指令
-- `include`：导入公共页面片段
+- `include`：导入公共页面片段（如 footer.jsp）
+```jsp
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="footer.jsp" %>
+```
 - `taglib`：引入标签库（如 JSTL）
+```jsp
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql" %>
+```
+
+#### Session 执行原理
+- 默认30分钟有效期
+- 30分钟内收到任何HTTP请求 → 重置有效时间为30分钟（加钟）
+- 30分钟内未收到请求 → Tomcat自动销毁 Session
 
 ---
 
@@ -1280,6 +1547,9 @@ ${属性}  // 获取顺序：pageContext → request → session → ServletCont
 - 底层：**工厂模式 + 反射 + HashMap单例模式**
 - 一站式服务框架，程序员的春天
 
+#### Bean 生命周期
+实例化 → 属性注入(初始化) → 注册 Destruction 回调 → 服务化 → 销毁
+
 #### IOC（控制反转）
 - 创建对象的权利由主动变成被动接受
 - Spring容器统一管理组件
@@ -1349,6 +1619,30 @@ ${属性}  // 获取顺序：pageContext → request → session → ServletCont
 | 处理映射器 | 管理URL-类&方法关系 |
 | 处理适配器 | 处理参数和返回值 |
 | 视图解析器 | 逻辑视图名→真实视图资源 |
+
+#### 配置文件分工
+- `applicationContext.xml`：放置业务层、持久层的组件
+- `spring-mvc.xml`：放置表现层的组件
+
+#### SpringMVC 项目搭建步骤
+1. 创建 Web 项目
+2. 导入依赖
+3. 在 `src/main/resources` 创建 `spring-mvc.xml`
+4. 在 `src/main/resources` 创建 `spring-app.xml`
+5. 在 `web.xml` 中分别启动2大Spring容器
+6. 启动 Tomcat
+7. 释放 static 静态资源
+8. 正式进入开发
+
+#### 常用 JSON 注解
+```java
+@JsonSerialize(using = ToStringSerializer.class)  // 解决雪花ID前端丢失精度
+@JsonFormat(pattern = "yyyy-MM-dd")                // 时间日期格式化
+```
+
+#### 自定义类型转换器
+- 场景：前端发送日期格式 `2025/08/12`，后端无法解析
+- 解决：自定义类型转换器，告诉 SpringMVC 如何处理
 
 ---
 
