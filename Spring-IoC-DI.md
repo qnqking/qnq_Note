@@ -171,4 +171,5 @@ A 依赖 B，B 依赖 A → Spring 先创建 A 的早期引用放进三级缓存
 ## 相关笔记
 - [[Spring-MVC]] — 下一个知识块：RESTful Web API
 - [[Spring-AOP]] — 面向切面编程
+- [[注解速查表]] — 所有注解的大白话解释
 - [[JAVA]] — Java 基础

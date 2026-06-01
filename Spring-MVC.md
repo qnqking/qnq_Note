@@ -182,4 +182,5 @@ curl -X DELETE http://localhost:8080/api/users/1        # 删除
 ## 相关笔记
 - [[Spring-IoC-DI]] — 上一节：Spring 如何管理 Controller 及其依赖
 - [[Spring-AOP]] — 下一节：AOP 如何拦截 Controller 方法
+- [[注解速查表]] — 所有注解的大白话解释
 - [[JAVA]] — Java 基础
