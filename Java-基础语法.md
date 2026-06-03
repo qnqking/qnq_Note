@@ -91,20 +91,227 @@ switch (变量) {
 
 ## 数组
 
-- 存储大量相同数据类型的数据结构
-- 特点：元素类型一致、空间连续、长度固定、连续内存
+存储大量相同数据类型的数据结构。特点：元素类型一致、空间连续、长度固定。
+
+### 声明与初始化
+
+```java
+// 方式一：动态初始化（指定长度，元素为默认值）
+int[] arr1 = new int[5];          // {0, 0, 0, 0, 0}
+String[] arr2 = new String[3];    // {null, null, null}
+
+// 方式二：静态初始化（指定元素值）
+int[] arr3 = {1, 2, 3, 4, 5};
+String[] arr4 = {"Java", "Python", "Go"};
+
+// 方式三：先声明再分配
+int[] arr5;
+arr5 = new int[]{10, 20, 30};
+```
+
+### 遍历
+
+```java
+int[] arr = {11, 22, 33, 44, 55};
+
+// for 循环（有索引，可修改元素）
+for (int i = 0; i < arr.length; i++) {
+    System.out.println("下标" + i + " → " + arr[i]);
+}
+
+// 增强 for（简洁，只读遍历）
+for (int num : arr) {
+    System.out.println(num);
+}
+```
+
+### 常用操作
+
+```java
+int[] arr = {5, 3, 8, 1, 2};
+
+// 排序（原地排序）
+Arrays.sort(arr);                        // {1, 2, 3, 5, 8}
+
+// 二分查找（必须先排序）
+int idx = Arrays.binarySearch(arr, 5);   // 返回 3
+
+// 拷贝
+int[] copy = Arrays.copyOf(arr, arr.length);
+
+// 比较
+boolean eq = Arrays.equals(arr, copy);   // true
+
+// 打印数组内容
+System.out.println(Arrays.toString(arr)); // [1, 2, 3, 5, 8]
+
+// 填充
+Arrays.fill(arr, 0);                     // {0, 0, 0, 0, 0}
+```
+
+### 二维数组
+
+```java
+// 声明
+int[][] matrix = {
+    {1, 2, 3},
+    {4, 5, 6},
+    {7, 8, 9}
+};
+
+// 遍历
+for (int i = 0; i < matrix.length; i++) {
+    for (int j = 0; j < matrix[i].length; j++) {
+        System.out.print(matrix[i][j] + " ");
+    }
+    System.out.println();   // 换行
+}
+```
+
+### 数组使用场景
+
+| 场景 | 说明 |
+|------|------|
+| 存储固定数量数据 | 如一年 12 个月的天数 |
+| 算法练习 | 排序、查找、双指针、滑动窗口 |
+| 作为方法参数 | 可变参数底层就是数组 |
 
 ---
 
 ## 函数/方法
 
+> 方法就是一段可重复调用的代码块，用于完成特定功能。
+
+### 定义格式
+
 ```java
-[访问修饰符] [其他修饰符] 返回类型 函数名(形参列表) {
-    // 函数体
+[访问修饰符] [static] [final] 返回类型 方法名(形参列表) {
+    // 方法体
+    return 值;  // 如果返回类型不是 void
 }
 ```
 
-4 种组合：无参/有参 × 无返回/有返回
+### 4 种组合（完整示例）
+
+```java
+public class MethodDemo {
+
+    // 1. 无参无返回 — 打印固定内容
+    public static void sayHello() {
+        System.out.println("Hello, Java!");
+    }
+
+    // 2. 有参无返回 — 打印传入内容
+    public static void greet(String name) {
+        System.out.println("你好, " + name + "!");
+    }
+
+    // 3. 无参有返回 — 返回固定值
+    public static int getAge() {
+        return 25;
+    }
+
+    // 4. 有参有返回 — 计算后返回结果
+    public static int add(int a, int b) {
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        sayHello();                  // → Hello, Java!
+        greet("小明");               // → 你好, 小明!
+        int age = getAge();          // age = 25
+        int sum = add(3, 5);         // sum = 8
+        System.out.println("结果: " + sum);
+    }
+}
+```
+
+### 方法重载（Overload）
+
+**同一类中**，方法名相同，参数列表不同（个数/类型/顺序不同），与返回值无关。
+
+```java
+// 以下三个方法互为重载
+public static int max(int a, int b) {
+    return a > b ? a : b;
+}
+
+public static int max(int a, int b, int c) {
+    int temp = max(a, b);
+    return temp > c ? temp : c;
+}
+
+public static double max(double a, double b) {
+    return a > b ? a : b;
+}
+
+// 调用时会根据参数类型自动匹配
+max(3, 5);       // 调用第一个
+max(1, 2, 3);    // 调用第二个
+max(3.5, 2.8);   // 调用第三个
+```
+
+### 递归
+
+方法调用自身。必须有两个条件：**递归公式** + **终止条件**，否则栈溢出。
+
+```java
+// 求 n 的阶乘：n! = n × (n-1)!
+public static int factorial(int n) {
+    if (n == 1) return 1;           // 终止条件
+    return n * factorial(n - 1);    // 递归公式
+}
+// factorial(5) = 5 × 4 × 3 × 2 × 1 = 120
+
+// 求第 n 个斐波那契数：1, 1, 2, 3, 5, 8, ...
+public static int fibonacci(int n) {
+    if (n == 1 || n == 2) return 1;            // 终止条件
+    return fibonacci(n - 1) + fibonacci(n - 2); // 递归公式
+}
+// fibonacci(6) = 8
+```
+
+### 可变参数
+
+JDK 5 引入，底层是数组。一个方法最多一个可变参数，且必须放在最后。
+
+```java
+// 求和（参数个数任意）
+public static int sum(int... nums) {
+    int total = 0;
+    for (int n : nums) {
+        total += n;
+    }
+    return total;
+}
+
+sum();         // 0
+sum(1, 2);     // 3
+sum(1, 2, 3);  // 6
+```
+
+### 方法参数传递规则
+
+| 参数类型 | 传递内容 | 方法内修改对调用处的影响 |
+|----------|----------|--------------------------|
+| 基本类型（int, double, ...） | 值的副本 | **无影响** |
+| 引用类型（对象, 数组, ...） | 地址的副本 | **影响**（指向同一对象） |
+
+```java
+// 基本类型 — 不影响原值
+public static void changeInt(int x) {
+    x = 100;      // 只改了副本
+}
+int a = 10;
+changeInt(a);     // a 仍然是 10
+
+// 引用类型 — 会影响原对象
+public static void changeArray(int[] arr) {
+    arr[0] = 999; // 改了指向的对象
+}
+int[] nums = {1, 2, 3};
+changeArray(nums);  // nums[0] 变成 999
+```
 
 ---
 
