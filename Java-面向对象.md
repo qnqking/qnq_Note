@@ -236,6 +236,98 @@ public class Duck extends Animal implements Flyable, Swimable {
 | 构造器 | 有 | 无 |
 | 变量 | 普通成员变量 | 仅常量（public static final） |
 
+### 使用场景对比
+
+```java
+// ===== 抽象类：is-a 关系，表示"是什么"，提取共同代码 =====
+public abstract class Employee {
+    protected String name;
+    protected double salary;
+
+    public Employee(String name, double salary) {
+        this.name = name;
+        this.salary = salary;
+    }
+
+    // 抽象方法：子类各不同
+    public abstract double calculateBonus();
+
+    // 具体方法：子类共用
+    public void clockIn() {
+        System.out.println(name + " 打卡上班");
+    }
+
+    public double getAnnualSalary() {
+        return salary * 12 + calculateBonus();
+    }
+}
+
+public class Programmer extends Employee {
+    public Programmer(String name, double salary) {
+        super(name, salary);
+    }
+
+    @Override
+    public double calculateBonus() {
+        return salary * 3;   // 程序员 3 个月年终奖
+    }
+}
+
+public class Salesman extends Employee {
+    public Salesman(String name, double salary) {
+        super(name, salary);
+    }
+
+    @Override
+    public double calculateBonus() {
+        return salary * 1;   // 销售 1 个月年终奖
+    }
+}
+
+// ===== 接口：can-do 关系，表示"能干什么"，定义额外能力 =====
+public interface Flyable {
+    void fly();
+}
+
+public interface Teachable {
+    void teach();
+}
+
+public interface Codeable {
+    void code();
+}
+
+// 一个类 = 一个抽象父类 + 多个接口
+public class TechLead extends Employee implements Codeable, Teachable {
+
+    public TechLead(String name, double salary) {
+        super(name, salary);
+    }
+
+    @Override
+    public double calculateBonus() { return salary * 4; }
+
+    @Override
+    public void code() {
+        System.out.println(name + " 在写核心代码");
+    }
+
+    @Override
+    public void teach() {
+        System.out.println(name + " 在带新人");
+    }
+}
+
+// ===== 使用 =====
+TechLead tl = new TechLead("老张", 20000);
+tl.clockIn();                                   // 老张 打卡上班（抽象类的具体方法）
+tl.code();                                      // 老张 在写核心代码（接口实现）
+tl.teach();                                     // 老张 在带新人（接口实现）
+System.out.println("年薪: " + tl.getAnnualSalary());  // 抽 + 接 + 具体方法混用
+```
+
+> **选谁？** 有共同属性/代码 → 抽象类；定义纯规范/能力 → 接口。两者不冲突，各司其职。
+
 ---
 
 ## static 关键字
