@@ -364,14 +364,158 @@ changeArray(nums);  // nums[0] 变成 999
 
 ## 常用 API
 
-| 方法 | 作用 |
-|------|------|
-| `Arrays.toString()` | 打印数组内容 |
-| `Integer.parseInt()` | 字符串转整数 |
-| `str.equals()` | 比较字符串内容是否相同 |
-| `str.contains()` | 判断是否包含子串 |
-| `str.startsWith()` / `str.endsWith()` | 判断开头/结尾 |
-| `toString()` | Object 的方法，默认返回内存地址，需重写 |
+### String 系列
+
+```java
+String s = "Hello Java 你好";
+
+// 长度与判空
+s.length();                          // 13（空格也算）
+s.isEmpty();                         // false
+s.isBlank();                         // false（JDK 11+，只含空白才返回 true）
+
+// 获取字符
+s.charAt(0);                         // 'H'
+s.charAt(6);                         // 'J'
+
+// 截取
+s.substring(6);                      // "Java 你好"
+s.substring(0, 5);                   // "Hello"（左闭右开）
+
+// 查找
+s.indexOf("Java");                   // 6，找不到返回 -1
+s.lastIndexOf("l");                  // 3（最后一次出现位置）
+s.contains("llo");                   // true
+
+// 大小写
+s.toUpperCase();                     // "HELLO JAVA 你好"
+s.toLowerCase();                     // "hello java 你好"
+
+// 去除首尾空白
+"   a b c   ".trim();               // "a b c"（只去半角空格）
+"   a b c   ".strip();              // "a b c"（也能去全角空格，JDK 11+）
+
+// 拆分
+"a,b,c".split(",");                  // ["a", "b", "c"]
+
+// 替换
+s.replace("Java", "World");          // "Hello World 你好"
+s.replaceAll("\\s+", "-");           // "Hello-Java-你好"（正则替换）
+
+// 格式化（类似 C 的 printf）
+String.format("我叫%s，今年%d岁", "小明", 20);  // "我叫小明，今年20岁"
+
+// 字符串拼接成数组形式
+String.join(", ", "A", "B", "C");    // "A, B, C"
+```
+
+### 包装类与类型转换
+
+```java
+// String → 基本类型
+int n = Integer.parseInt("123");       // 123
+double d = Double.parseDouble("3.14"); // 3.14
+long l = Long.parseLong("999");        // 999
+
+// 基本类型 → String
+String s1 = String.valueOf(123);       // "123"
+String s2 = Integer.toString(456);     // "456"
+String s3 = 3.14 + "";                 // "3.14"（快捷方式）
+
+// 包装类常量
+int max = Integer.MAX_VALUE;           // 2147483647
+int min = Integer.MIN_VALUE;           // -2147483648
+
+// Character 字符判断
+Character.isDigit('5');                // true
+Character.isLetter('A');               // true
+Character.isUpperCase('A');            // true
+Character.isWhitespace(' ');           // true
+```
+
+### Math 数学运算
+
+```java
+Math.abs(-5);                          // 5（绝对值）
+Math.max(3, 8);                        // 8
+Math.min(3, 8);                        // 3
+Math.pow(2, 10);                       // 1024.0（2 的 10 次方）
+Math.sqrt(16);                         // 4.0（平方根）
+Math.random();                         // [0.0, 1.0) 随机数
+
+// 随机整数：取 [0, 100) 的整数
+int rand = (int)(Math.random() * 100);
+
+// 四舍五入
+Math.round(3.4);                       // 3
+Math.round(3.5);                       // 4
+Math.ceil(3.1);                        // 4.0（向上取整）
+Math.floor(3.9);                       // 3.0（向下取整）
+```
+
+### Scanner 键盘输入
+
+```java
+import java.util.Scanner;
+
+Scanner sc = new Scanner(System.in);
+
+System.out.print("请输入姓名：");
+String name = sc.next();               // 读取字符串（遇空格/换行结束）
+
+System.out.print("请输入年龄：");
+int age = sc.nextInt();                // 读取整数
+
+System.out.print("请输入一句话：");
+sc.nextLine();                         // 吃掉上一个 nextInt 剩下的换行符 ⚠️
+String line = sc.nextLine();           // 读取一整行
+
+System.out.println("姓名：" + name + "，年龄：" + age);
+sc.close();                            // 用完关闭
+```
+
+### Arrays 工具类
+
+```java
+int[] arr = {5, 3, 8, 1, 2};
+
+Arrays.sort(arr);                      // 排序 → [1, 2, 3, 5, 8]
+Arrays.toString(arr);                  // 打印 → "[1, 2, 3, 5, 8]"
+Arrays.binarySearch(arr, 5);           // 二分查找 → 3（先排序）
+Arrays.copyOf(arr, 3);                 // 截取前 3 个 → [1, 2, 3]
+Arrays.equals(arr, arr2);              // 比较两个数组
+Arrays.fill(arr, 0);                   // 全部填 0
+```
+
+### Object 三大方法
+
+```java
+public class Student {
+    String name;
+    int age;
+
+    // 重写 toString → println 时不再打印内存地址
+    @Override
+    public String toString() {
+        return "Student{name='" + name + "', age=" + age + "}";
+    }
+
+    // 重写 equals → 比较内容而非地址
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Student s = (Student) o;
+        return age == s.age && Objects.equals(name, s.name);
+    }
+
+    // 重写 equals 必须重写 hashCode（HashMap/HashSet 需要）
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+}
+```
 
 ---
 
