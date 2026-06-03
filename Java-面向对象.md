@@ -456,17 +456,17 @@ Student s2 = new Student("小明", 20);    // 有参
 
 ## 关键字全集
 
-| 类别 | 关键字 |
-|------|--------|
-| 基本数据类型 | byte, short, int, long, float, double, char, boolean, void |
-| 流程控制 | if, else, switch, case, default, for, while, do, break, continue, try, catch, finally, throw, throws |
-| 类/方法/变量 | class, interface, enum, extends, implements |
-| 访问控制 | private, protected, public |
-| 修饰符 | static, final, abstract, synchronized, volatile, transient, native, strictfp, default |
-| 引用相关 | this, super, new, instanceof |
-| 包/导入 | package, import |
-| 其他 | true, false, null, assert, var（Java 10+） |
-| 保留字 | goto, const（未被使用） |
+| 类别      | 关键字                                                                                                  |
+| ------- | ---------------------------------------------------------------------------------------------------- |
+| 基本数据类型  | byte, short, int, long, float, double, char, boolean, void                                           |
+| 流程控制    | if, else, switch, case, default, for, while, do, break, continue, try, catch, finally, throw, throws |
+| 类/方法/变量 | class, interface, enum, extends, implements                                                          |
+| 访问控制    | private, protected, public                                                                           |
+| 修饰符     | static, final, abstract, synchronized, volatile, transient, native, strictfp, default                |
+| 引用相关    | this, super, new, instanceof                                                                         |
+| 包/导入    | package, import                                                                                      |
+| 其他      | true, false, null, assert, var（Java 10+）                                                             |
+| 保留字     | goto, const（未被使用）                                                                                    |
 
 > 所有关键字都是小写，不能用作标识符
 
