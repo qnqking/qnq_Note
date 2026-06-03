@@ -123,6 +123,29 @@ for (int i = 0; i < arr.length; i++) {
 for (int num : arr) {
     System.out.println(num);
 }
+
+// 遍历 String 数组
+String[] names = {"小明", "小红", "小刚"};
+for (String name : names) {
+    System.out.println(name);
+}
+
+// 遍历二维数组（外层 int[]，内层 int）
+int[][] matrix = {{1, 2}, {3, 4}, {5, 6}};
+for (int[] row : matrix) {
+    for (int val : row) {
+        System.out.print(val + " ");
+    }
+    System.out.println();
+}
+
+// 计算所有元素的和
+int[] scores = {88, 92, 76, 85, 90};
+int total = 0;
+for (int s : scores) {
+    total += s;
+}
+System.out.println("总分: " + total);  // 431
 ```
 
 ### 常用操作
