@@ -22,6 +22,38 @@
 3. 实现 Callable 接口（有返回值）
 4. 线程池（ThreadPoolExecutor）
 
+```java
+// 方式 1：继承 Thread
+class MyThread extends Thread {
+    @Override
+    public void run() {
+        System.out.println("Thread 方式运行");
+    }
+}
+new MyThread().start();
+
+// 方式 2：实现 Runnable（推荐，不占继承位）
+class MyRunnable implements Runnable {
+    @Override
+    public void run() {
+        System.out.println("Runnable 方式运行");
+    }
+}
+new Thread(new MyRunnable()).start();
+
+// Lambda 简写
+new Thread(() -> System.out.println("Lambda 简写")).start();
+
+// 方式 3：Callable + FutureTask（有返回值 + 抛异常）
+Callable<Integer> task = () -> {
+    Thread.sleep(1000);
+    return 42;
+};
+FutureTask<Integer> ft = new FutureTask<>(task);
+new Thread(ft).start();
+Integer result = ft.get();    // 阻塞等待，拿到 42
+```
+
 ### start() vs run()
 
 - `run()`：定义任务，由 CPU 调用
@@ -75,6 +107,53 @@ public synchronized void method() { ... }
 
 - 可公平/不公平，可重入，不可剥夺，互斥
 
+```java
+// synchronized 的替代品，更灵活
+Lock lock = new ReentrantLock();
+
+lock.lock();
+try {
+    // 临界区代码
+} finally {
+    lock.unlock();  // 必须在 finally 中释放
+}
+
+// 带超时的 tryLock
+if (lock.tryLock(2, TimeUnit.SECONDS)) {
+    try {
+        // 获取到锁
+    } finally {
+        lock.unlock();
+    }
+} else {
+    // 2 秒内没拿到锁，干别的
+}
+```
+
+### wait / notify
+
+```java
+// 生产者-消费者模型
+class Box {
+    private int data;
+    private boolean empty = true;
+
+    public synchronized void put(int value) throws InterruptedException {
+        while (!empty) wait();        // 有数据就等
+        data = value;
+        empty = false;
+        notifyAll();                  // 唤醒消费者
+    }
+
+    public synchronized int take() throws InterruptedException {
+        while (empty) wait();         // 空就等
+        empty = true;
+        notifyAll();                  // 唤醒生产者
+        return data;
+    }
+}
+```
+
 ### CAS（Compare-And-Swap）& ABA 问题
 
 - **CAS**：乐观锁，乐观认为并发较低没有冲突
@@ -94,6 +173,21 @@ public synchronized void method() { ... }
 - 保证可见性（Visibility）
 - 禁止指令重排（Ordering）
 - **不保证原子性**（Atomicity，需 synchronized 或 Lock 保证）
+
+```java
+// volatile 保证可见性 —— 一个线程改了，另一个线程立刻看到
+public class Flag {
+    // 去掉 volatile，子线程可能永远看不到 main 线程的修改
+    private volatile boolean stop = false;
+
+    public void run() {
+        while (!stop) { /* 执行任务 */ }
+        System.out.println("子线程结束");
+    }
+
+    public void stop() { stop = true; }
+}
+```
 
 ---
 
@@ -129,6 +223,23 @@ public static JdbcTemplate getInstance() {
 
 线程局部变量，每个线程有独立副本。应用场景：数据库连接管理、用户信息传递。
 
+```java
+// 每个线程有自己的值，互不干扰
+ThreadLocal<Integer> threadLocal = ThreadLocal.withInitial(() -> 0);
+
+new Thread(() -> {
+    threadLocal.set(100);
+    System.out.println(threadLocal.get());   // 100
+}).start();
+
+new Thread(() -> {
+    System.out.println(threadLocal.get());   // 0（独立副本）
+}).start();
+
+// 用完记得 remove，防止内存泄漏
+threadLocal.remove();
+```
+
 ---
 
 ## 六、守护线程（Daemon Thread）
@@ -142,7 +253,33 @@ public static JdbcTemplate getInstance() {
 - `es.execute()`：只能提交 Runnable 任务
 - `es.submit()`：可提交 Runnable 和 Callable 任务
 
----
+```java
+// 创建线程池（7 个核心参数）
+ThreadPoolExecutor pool = new ThreadPoolExecutor(
+    2,                         // corePoolSize：核心线程数
+    5,                         // maxPoolSize：最大线程数
+    60, TimeUnit.SECONDS,      // 空闲线程存活时间
+    new LinkedBlockingQueue<>(100),  // 任务队列
+    Executors.defaultThreadFactory(),
+    new ThreadPoolExecutor.CallerRunsPolicy()  // 拒绝策略
+);
+
+// 提交任务
+pool.execute(() -> System.out.println("Runnable 任务"));
+Future<String> future = pool.submit(() -> {
+    Thread.sleep(500);
+    return "Callable 结果";
+});
+String result = future.get();  // "Callable 结果"
+
+// 常用快捷方式（不推荐生产用，队列无限长会 OOM）
+ExecutorService cached = Executors.newCachedThreadPool();  // 弹性
+ExecutorService fixed = Executors.newFixedThreadPool(4);    // 固定
+ExecutorService single = Executors.newSingleThreadExecutor();// 单线程
+
+// 用完关闭
+pool.shutdown();
+```
 
 ## 八、JVM
 

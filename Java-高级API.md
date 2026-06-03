@@ -6,13 +6,78 @@
 
 语法：`(参数列表) -> { 业务代码 }`
 
----
+```java
+// 传统匿名内部类
+new Thread(new Runnable() {
+    @Override
+    public void run() {
+        System.out.println("Hello");
+    }
+}).start();
+
+// Lambda 简写
+new Thread(() -> System.out.println("Hello")).start();
+
+// 各种省略写法
+// a) 有参 -> 单条语句省略大括号和 return
+list.forEach(s -> System.out.println(s));
+
+// b) 有参多行
+list.forEach(s -> {
+    String upper = s.toUpperCase();
+    System.out.println(upper);
+});
+
+// c) 方法引用
+list.forEach(System.out::println);       // 实例方法引用
+list.stream().map(String::toUpperCase);  // 类方法引用（参数就是调用者）
+```
 
 ## Stream 流
 
 处理数据的流水线（与 IO 流概念不同）。集合的作用是**装数据**，Stream 的作用是**处理数据**。
 
 常用 API：过滤（filter）、转换（map）、统计（count）、排序（sorted）、采集（collect）……
+
+```java
+List<String> list = Arrays.asList("Java", "Python", "Go", "C++", "Java");
+
+// filter — 过滤
+list.stream().filter(s -> s.length() > 2)
+             .forEach(System.out::println);  // Java, Python, C++, Java
+
+// distinct — 去重
+list.stream().distinct().collect(Collectors.toList());  // [Java, Python, Go, C++]
+
+// map — 映射/转换
+list.stream().map(String::toUpperCase)
+             .collect(Collectors.toList());  // [JAVA, PYTHON, GO, C++, JAVA]
+
+// sorted — 排序
+list.stream().sorted().collect(Collectors.toList());   // 自然排序
+list.stream().sorted((a,b) -> b.compareTo(a))          // 自定义降序
+             .collect(Collectors.toList());
+
+// limit / skip
+list.stream().limit(3).collect(Collectors.toList());   // 前 3 个
+list.stream().skip(2).collect(Collectors.toList());    // 跳过前 2 个
+
+// 组合使用：找出长度 > 2 的元素，转大写，去重，排序，取前 2
+List<String> result = list.stream()
+    .filter(s -> s.length() > 2)
+    .map(String::toUpperCase)
+    .distinct()
+    .sorted()
+    .limit(2)
+    .collect(Collectors.toList());
+// → [C++, JAVA]
+
+// 终端操作
+list.stream().count();                   // 计数
+list.stream().anyMatch(s -> s.equals("Java"));  // 是否有匹配
+List<Integer> nums = Arrays.asList(1, 2, 3, 4, 5);
+nums.stream().reduce(0, Integer::sum);   // 求和 = 15
+```
 
 ### 两种流
 
@@ -37,6 +102,35 @@
 
 **数据存储演进**：变量 → 数组 → 集合（缺乏持久性） → 文件 → MySQL 数据库
 
+```java
+// ======== 字节流 ========
+// 读文件
+try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream("a.txt"))) {
+    byte[] buf = new byte[1024];
+    int len;
+    while ((len = bis.read(buf)) != -1) {
+        System.out.print(new String(buf, 0, len));
+    }
+}
+
+// 写文件
+try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("b.txt"))) {
+    bos.write("Hello Java".getBytes());
+}
+
+// ======== 字符流（只能处理文本）========
+// 逐行读 + 逐行写
+try (BufferedReader br = new BufferedReader(new FileReader("a.txt"));
+     BufferedWriter bw = new BufferedWriter(new FileWriter("b.txt"))) {
+    String line;
+    while ((line = br.readLine()) != null) {
+        bw.write(line);
+        bw.newLine();
+    }
+}
+// try-with-resources 自动关闭流，省去 finally 中手写 close()
+```
+
 ---
 
 ## JDBC（Java Database Connectivity）
@@ -54,6 +148,35 @@ String sql = "SELECT * FROM books WHERE author = " + author;
 // 安全写法：参数化查询（PreparedStatement / MyBatis #{}）
 ```
 
+### JDBC CRUD 完整示例
+
+```java
+// 查询
+String sql = "SELECT id, name, age FROM student WHERE age > ?";
+try (Connection conn = DriverManager.getConnection(url, user, password);
+     PreparedStatement ps = conn.prepareStatement(sql)) {
+    ps.setInt(1, 18);
+    try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+            int id = rs.getInt("id");
+            String name = rs.getString("name");
+            int age = rs.getInt("age");
+            System.out.println(id + ", " + name + ", " + age);
+        }
+    }
+}
+
+// 增删改（用 executeUpdate）
+String insert = "INSERT INTO student(name, age) VALUES(?, ?)";
+try (Connection conn = DriverManager.getConnection(url, user, password);
+     PreparedStatement ps = conn.prepareStatement(insert)) {
+    ps.setString(1, "小明");
+    ps.setInt(2, 20);
+    int rows = ps.executeUpdate();   // 返回影响行数
+    System.out.println("插入 " + rows + " 行");
+}
+```
+
 ---
 
 ## 异常
@@ -65,6 +188,27 @@ String sql = "SELECT * FROM books WHERE author = " + author;
 
 - `throw`：用来抛出异常
 - `throws`：声明方法可能抛出异常
+
+```java
+// try-catch-finally
+try {
+    int n = Integer.parseInt("abc");   // 可能抛 NumberFormatException
+} catch (NumberFormatException e) {
+    System.out.println("数字格式错误：" + e.getMessage());
+} catch (Exception e) {
+    System.out.println("其他异常：" + e);
+} finally {
+    System.out.println("无论是否异常都会执行");
+}
+
+// try-with-resources（自动关闭实现 AutoCloseable 的资源）
+// 不需要写 finally 手动 close()
+try (BufferedReader br = new BufferedReader(new FileReader("file.txt"))) {
+    String line = br.readLine();
+} catch (IOException e) {
+    e.printStackTrace();
+}
+```
 
 ### 全局异常处理
 
@@ -81,6 +225,24 @@ String sql = "SELECT * FROM books WHERE author = " + author;
 - 比较用 `compareTo()`
 - 构造推荐用 String
 
+```java
+// ❌ 浮点数精度丢失
+System.out.println(0.1 + 0.2);           // 0.30000000000000004
+
+// ✅ BigDecimal 精确计算
+BigDecimal a = new BigDecimal("0.1");     // 一定要用 String 构造！
+BigDecimal b = new BigDecimal("0.2");
+BigDecimal sum = a.add(b);                // 0.3
+BigDecimal diff = a.subtract(b);          // -0.1
+BigDecimal product = a.multiply(b);       // 0.02
+BigDecimal quotient = a.divide(b, 2, RoundingMode.HALF_UP);  // 保留 2 位，四舍五入
+
+// 比较 —— 必须用 compareTo，不能用 equals（equals 比较值和精度）
+a.compareTo(b);        // -1（a < b）
+a.compareTo(a);        // 0（相等）
+b.compareTo(a);        // 1（b > a）
+```
+
 ---
 
 ## 日期时间 API
@@ -88,6 +250,28 @@ String sql = "SELECT * FROM books WHERE author = " + author;
 **Java 8 之前**：`Date`（方法过时）、`Calendar`、`SimpleDateFormat`（非线程安全）
 
 **Java 8 之后**：`LocalDate`（日期）、`LocalTime`（时间）、`LocalDateTime`（日期时间）
+
+```java
+// 获取当前日期时间
+LocalDate now = LocalDate.now();               // 2026-06-03
+LocalTime time = LocalTime.now();              // 15:30:00.123
+LocalDateTime dt = LocalDateTime.now();        // 2026-06-03T15:30:00.123
+
+// 创建指定日期
+LocalDate d = LocalDate.of(2026, 6, 3);
+LocalDateTime dt2 = LocalDateTime.of(2026, 6, 3, 15, 30);
+
+// 日期运算
+d.plusDays(1);           // 加 1 天
+d.minusMonths(1);        // 减 1 个月
+d.isAfter(now);          // 是否在 now 之后
+d.isBefore(now);         // 是否在 now 之前
+
+// 格式化
+DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+String str = dt.format(fmt);                   // "2026-06-03 15:30:00"
+dt = LocalDateTime.parse("2026-06-03 15:30:00", fmt);
+```
 
 `SimpleDateFormat` 建议用 `ThreadLocal` 包装或改用 `java.time` 包。
 

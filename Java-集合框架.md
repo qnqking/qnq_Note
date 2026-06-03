@@ -34,6 +34,31 @@
 - 底层：数组
 - 线程安全（synchronized），性能低（已少用）
 
+```java
+// ArrayList —— 日常开发首选
+List<String> list = new ArrayList<>();
+list.add("Java");
+list.add("Python");
+list.add(0, "Go");           // 指定位置插入
+list.get(1);                  // "Java"（按索引取值）
+list.set(1, "C++");           // 替换
+list.remove(0);               // 按索引删除
+list.remove("Python");        // 按对象删除
+list.contains("Java");        // 是否包含
+list.size();                  // 元素个数
+
+// 三种遍历
+for (int i = 0; i < list.size(); i++) { ... }           // 索引
+for (String s : list) { ... }                           // 增强 for
+list.forEach(s -> System.out.println(s));               // Lambda
+
+// LinkedList —— 频繁增删场景
+LinkedList<String> linked = new LinkedList<>();
+linked.addFirst("头");       // 头部插入（O(1)）
+linked.addLast("尾");         // 尾部插入（O(1)）
+linked.removeFirst();         // 头部删除（O(1)）
+```
+
 ---
 
 ## Set 实现类
@@ -59,11 +84,59 @@
 - 去重规则：比较器（Comparator）
 - 有序，可通过传入比较器自定义排序
 
----
+```java
+// HashSet —— 去重
+Set<String> set = new HashSet<>();
+set.add("Java");
+set.add("Python");
+set.add("Java");             // 重复，不存
+System.out.println(set);     // [Java, Python]（无序）
+
+// 自定义对象去重 —— 必须重写 equals + hashCode
+Set<Student> students = new HashSet<>();
+students.add(new Student("小明", 20));
+students.add(new Student("小明", 20));  // 视为重复
+System.out.println(students.size());    // 1
+
+// TreeSet —— 排序 + 去重
+Set<Integer> sorted = new TreeSet<>();
+sorted.add(5); sorted.add(2); sorted.add(8);
+System.out.println(sorted);  // [2, 5, 8]（自动升序）
+
+// TreeSet 自定义排序 —— 传入比较器
+Set<Student> ts = new TreeSet<>((o1, o2) -> o2.getAge() - o1.getAge());
+ts.add(new Student("小明", 20));
+ts.add(new Student("小红", 25));  // 按年龄降序
+```
 
 ## Map 体系
 
 双列集合，有 Key 有 Value。Key 不允许重复，Value 可以重复。Key-Value 之间是 1 对 1 关系。
+
+```java
+Map<String, Integer> map = new HashMap<>();
+
+// 增/改
+map.put("Java", 1);
+map.put("Python", 2);
+map.put("Java", 3);              // Key 重复，覆盖原 Value（1→3）
+
+// 查
+map.get("Java");                 // 3
+map.getOrDefault("Go", 0);       // 0（不存在时返回默认值）
+map.containsKey("Java");         // true
+map.containsValue(2);            // true
+
+// 删
+map.remove("Python");
+
+// 遍历
+map.forEach((k, v) -> System.out.println(k + "=" + v));
+
+for (Map.Entry<String, Integer> entry : map.entrySet()) {
+    System.out.println(entry.getKey() + "=" + entry.getValue());
+}
+```
 
 ### HashMap
 
@@ -103,6 +176,22 @@
 ## 迭代器（Iterator）
 
 集合遍历手段，特点：**边遍历边删除数据**。
+
+```java
+List<String> list = new ArrayList<>();
+list.add("Java");
+list.add("Python");
+list.add("Go");
+
+Iterator<String> it = list.iterator();
+while (it.hasNext()) {
+    String s = it.next();
+    if ("Python".equals(s)) {
+        it.remove();    // 用迭代器删除，安全
+    }
+}
+// ❌ 增强 for 中直接 list.remove() 会抛 ConcurrentModificationException
+```
 
 ---
 
