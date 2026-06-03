@@ -216,7 +216,7 @@ public class Duck extends Animal implements Flyable, Swimable {
 
 ---
 
-## 重写（Override）vs 重载（Overload）
+## 重写（Override）vs[方法重载（Overload）](Java-基础语法.md#方法重载（Overload）) 
 
 | 特性 | 重写（Override） | 重载（Overload） |
 |------|-----------------|-----------------|
