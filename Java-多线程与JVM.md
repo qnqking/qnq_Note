@@ -191,7 +191,7 @@ public class Flag {
 
 ---
 
-## 四、单例模式（Singleton）
+## [四、单例模式（Singleton）](架构与安全.md)
 
 ### 饿汉模式（天生线程安全）
 
@@ -281,7 +281,7 @@ ExecutorService single = Executors.newSingleThreadExecutor();// 单线程
 pool.shutdown();
 ```
 
-## 八、JVM
+## [八、JVM](Java-面向对象.md)
 
 ### 内存区域
 

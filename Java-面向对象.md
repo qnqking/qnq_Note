@@ -353,10 +353,12 @@ Student s1 = new Student();              // 无参
 Student s2 = new Student("小明", 20);    // 有参
 ```
 
-## 类的加载
+## [类的加载](Java-多线程与JVM.md)
 
 - 每个类只加载 1 次
 - 静态成员在类加载期间就准备好，实例成员在运行期间创建
+
+> 详见 [[Java-多线程与JVM]] 的 JVM 类加载部分
 
 ---
 
@@ -378,7 +380,7 @@ Student s2 = new Student("小明", 20);    // 有参
 
 ---
 
-## 7 大设计原则
+## [7 大设计原则](架构与安全.md)
 
 1. **单一原则（SRP）**：一个类只干一件事
 2. **开闭原则（OCP）**：对扩展开放，对修改关闭
@@ -392,7 +394,7 @@ Student s2 = new Student("小明", 20);    // 有参
 
 ---
 
-## equals() & hashCode() 联合判重
+## [equals() & hashCode() 联合判重](Java-集合框架.md)
 
 1. 先判 `hashCode()`（性能好，做快筛）→ 不同则直接判定不同
 2. hashCode 相同 → `equals()` 做最终判断（性能不好但准确）
@@ -425,7 +427,7 @@ System.out.println(s1.equals(s2));     // true（内容相同）
 System.out.println(s1.hashCode() == s2.hashCode());  // true
 ```
 
-## 比较器（Comparator）
+## [比较器（Comparator）](Java-集合框架.md)
 
 - 比较器内部封装了基础排序算法（两两比对）
 - 重写 `compare()` 方法专注于多字段排序业务

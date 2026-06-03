@@ -562,7 +562,7 @@ public class Student {
 
 ---
 
-## JDK / JRE / JVM
+## [JDK / JRE / JVM](Java-多线程与JVM.md)
 
 - **JVM**（Java Virtual Machine）：对接各大 OS 平台
 - **JRE**（Java Runtime Environment）：提供运行环境

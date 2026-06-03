@@ -1,6 +1,6 @@
 # Java 高级 API
 
-## Lambda 表达式
+## [Lambda 表达式](Java-集合框架.md)
 
 替代接口作为匿名内部类的写法。
 
@@ -33,7 +33,7 @@ list.forEach(System.out::println);       // 实例方法引用
 list.stream().map(String::toUpperCase);  // 类方法引用（参数就是调用者）
 ```
 
-## Stream 流
+## [Stream 流](Java-集合框架.md)
 
 处理数据的流水线（与 IO 流概念不同）。集合的作用是**装数据**，Stream 的作用是**处理数据**。
 
@@ -133,7 +133,7 @@ try (BufferedReader br = new BufferedReader(new FileReader("a.txt"));
 
 ---
 
-## JDBC（Java Database Connectivity）
+## [JDBC（Java Database Connectivity）](MySQL-核心基础.md)
 
 SUN 公司定义规范（接口），各大数据库厂商自行实现（驱动 Driver）。
 
@@ -277,7 +277,7 @@ dt = LocalDateTime.parse("2026-06-03 15:30:00", fmt);
 
 ---
 
-## 常见 Java 内置注解
+## [常见 Java 内置注解](注解速查表.md)
 
 | 注解 | 含义 |
 |------|------|
@@ -308,7 +308,7 @@ dt = LocalDateTime.parse("2026-06-03 15:30:00", fmt);
 
 ---
 
-## Properties 集合
+## [Properties 集合](Java-集合框架.md)
 
 Map 体系子集，K-V 都是字符串。常用于 `db.properties` 数据库配置文件。
 

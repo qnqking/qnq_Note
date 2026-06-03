@@ -1,6 +1,6 @@
 # Java 泛型与反射
 
-## 泛型（Generics）
+## [泛型（Generics）](Java-集合框架.md)
 
 ### 泛型接口
 
@@ -50,7 +50,7 @@ public static void addNumbers(List<? super Integer> list) {
 
 ---
 
-## 反射（Reflection）
+## [反射（Reflection）](Java-面向对象.md)
 
 在程序运行时动态获取类信息、创建对象、调用成员。
 
