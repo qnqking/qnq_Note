@@ -929,10 +929,10 @@ Spring Cloud 2022.x+ 弃用了 Sleuth，改用 **Micrometer Tracing**。
 
 ## 相关笔记
 
-- [[Spring-Boot]] — 微服务的构建基础
+- [[JAVA/Spring-Boot]] — 微服务的构建基础
 - [[Spring-IoC-DI]] — 理解 Feign 动态代理的前提
 - [[Spring-MVC]] — Feign 调用语法跟 MVC 注解一致
-- [[Spring-AOP]] — Sentinel 熔断底层也是 AOP
+- [[JAVA/Spring-AOP]] — Sentinel 熔断底层也是 AOP
 - [[架构与安全]] — Maven 依赖管理、REST API 设计
 - [[Redis]] — 分布式缓存，配合微服务使用
 - [[Docker]] — 微服务容器化部署

@@ -245,5 +245,5 @@ END;
 ## 相关笔记
 
 - [[MySQL-高级]] — 索引、事务、锁、MVCC
-- [[Java-高级API]] — JDBC 连接数据库
+- [[JAVA/Java-高级API]] — JDBC 连接数据库
 - [[MyBatis与ORM]] — ORM 框架

@@ -25,27 +25,27 @@
 ### Day 1 — 环境 + 基础语法
 
 - JDK 17/21 安装、环境变量配置、IDEA 安装与基本使用
-- 参考：[[Java-基础语法]]
+- 参考：[[JAVA/Java-基础语法]]
 - 重点：8 种基本数据类型及转换规则、运算符优先级、`Scanner` 输入
 - 练习：写一个命令行计算器（加减乘除，循环输入）
 
 ### Day 2 — 控制流 + 数组
 
-- 参考：[[Java-基础语法]]
+- 参考：[[JAVA/Java-基础语法]]
 - 重点：`if/switch`、`for/while/do-while`、`break/continue` 标签
 - 重点：数组声明与初始化、`Arrays` 工具类、二维数组
 - 练习：冒泡排序、二分查找、杨辉三角打印
 
 ### Day 3 — 面向对象（上）
 
-- 参考：[[Java-面向对象]]
+- 参考：[[JAVA/Java-面向对象]]
 - 重点：类与对象、`this` 关键字、构造器重载、`static` 与实例成员的区别
 - 重点：`private/default/protected/public` 四种权限——用表格默写
 - 练习：写一个 `Student` 类管理系统（增删查改，内存存储）
 
 ### Day 4 — 面向对象（下）
 
-- 参考：[[Java-面向对象]]
+- 参考：[[JAVA/Java-面向对象]]
 - 重点：继承（`extends`）、`super`、方法重写 vs 重载、`final` 三种用法
 - 重点：抽象类 vs 接口（语法 + 设计区别）、`default` 方法
 - 重点：多态三要素——父类引用指向子类对象、编译看左边运行看右边
@@ -53,7 +53,7 @@
 
 ### Day 5 — String + 常用 API
 
-- 参考：[[Java-基础语法]] 的 String 部分
+- 参考：[[JAVA/Java-基础语法]] 的 String 部分
 - 重点：`String` 不可变性、字符串常量池、`StringBuilder`/`StringBuffer`
 - 重点：`Object.equals()` vs `==`、`hashCode()` 约定
 - 重点：包装类（`int`↔`Integer`）、自动拆装箱、`Integer` 缓存 `[-128, 127]`
@@ -73,7 +73,7 @@
 
 ### Day 7 — List + Set
 
-- 参考：[[Java-集合框架]]
+- 参考：[[JAVA/Java-集合框架]]
 - 重点：`ArrayList` vs `LinkedList`（底层结构 + 增删查效率对比）
 - 重点：`HashSet` 去重原理——先 `hashCode()` 后 `equals()`
 - 重点：`TreeSet` 自然排序 vs 定制排序（`Comparable` vs `Comparator`）
@@ -81,7 +81,7 @@
 
 ### Day 8 — Map
 
-- 参考：[[Java-集合框架]]
+- 参考：[[JAVA/Java-集合框架]]
 - 重点：`HashMap` 底层：数组+链表+红黑树、put 流程、扩容机制（负载因子 0.75）
 - 重点：`TreeMap` 按 key 排序、`LinkedHashMap` 保持插入顺序
 - 重点：`Collections` 工具类常用方法
@@ -89,14 +89,14 @@
 
 ### Day 9 — 泛型
 
-- 参考：[[Java-泛型与反射]]
+- 参考：[[JAVA/Java-泛型与反射]]
 - 重点：为什么要有泛型（类型安全 + 消除强转）、类型擦除
 - 重点：泛型类/接口/方法、泛型通配符 `? extends`（上界）vs `? super`（下界）
 - 练习：写一个泛型 DAO 基类，配合 Book/User 实体子类使用
 
 ### Day 10 — 反射 + 注解
 
-- 参考：[[Java-泛型与反射]]
+- 参考：[[JAVA/Java-泛型与反射]]
 - 重点：获取 `Class` 对象的三种方式、`Constructor`/`Field`/`Method` 的反射操作
 - 重点：`setAccessible(true)` 暴力反射
 - 注解：`@Override`/`@Deprecated`/`@SuppressWarnings` + 元注解 `@Target`/`@Retention`
@@ -104,14 +104,14 @@
 
 ### Day 11 — Lambda + Stream
 
-- 参考：[[Java-高级API]]
+- 参考：[[JAVA/Java-高级API]]
 - 重点：Lambda 语法糖、四大函数式接口（`Function`/`Consumer`/`Predicate`/`Supplier`）
 - 重点：Stream 创建 → filter/map/sorted → collect（中间操作惰性求值，终止操作触发计算）
 - 练习：给一个 `List<Person>` 用 Stream 做过滤、映射、排序、分组
 
 ### Day 12 — IO 流 + 异常
 
-- 参考：[[Java-高级API]]
+- 参考：[[JAVA/Java-高级API]]
 - 重点：字节流 vs 字符流、缓冲流包装、`try-with-resources`（实现 `AutoCloseable`）
 - 重点：异常体系——`Error`/`Exception`、checked vs unchecked、`throw` vs `throws`
 - 练习：用 `BufferedReader` 读取文件并统计行数/字符数
@@ -146,7 +146,7 @@
 
 ### Day 16 — JDBC 基础
 
-- 参考：[[Java-高级API]] 的 JDBC 部分
+- 参考：[[JAVA/Java-高级API]] 的 JDBC 部分
 - 重点：JDBC 六步流程——注册驱动、获取连接、写 SQL、执行、处理结果集、释放资源
 - 重点：**SQL 注入原理** + `PreparedStatement` 参数化查询防注入
 - 练习：用 JDBC 写一个 DAO 层，完成单表的 CRUD
@@ -278,8 +278,8 @@
 ### Day 36 — 面试高频复盘
 
 - Java 基础：HashMap 原理、String 不可变、异常体系、== vs equals
-- 多线程：线程生命周期、synchronized 锁升级、volatile 可见性（参考 [[Java-多线程与JVM]]）
-- JVM：内存区域、类加载机制、GC 算法与收集器（参考 [[Java-多线程与JVM]]）
+- 多线程：线程生命周期、synchronized 锁升级、volatile 可见性（参考 [[JAVA/Java-多线程与JVM]]）
+- JVM：内存区域、类加载机制、GC 算法与收集器（参考 [[JAVA/Java-多线程与JVM]]）
 - Spring：IoC 原理、AOP 原理、事务传播行为、Bean 生命周期
 - MySQL：索引 B+Tree、事务隔离级别、MVCC、SQL 优化
 - Redis：五种类型、缓存三大问题、持久化 RDB/AOF

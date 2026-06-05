@@ -11,12 +11,12 @@
 
 ## 第二阶段：Java 基础
 
-- [[Java-基础语法]] — 数据类型、运算符、控制流、数组、方法
-- [[Java-面向对象]] — 封装/继承/多态/抽象、接口、构造器、设计原则
-- [[Java-集合框架]] — Collection/Map 体系、HashMap、HashSet
-- [[Java-泛型与反射]] — 泛型、反射
-- [[Java-多线程与JVM]] — 多线程、锁、JVM
-- [[Java-高级API]] — Lambda/Stream、IO 流、JDBC、异常
+- [[JAVA/Java-基础语法]] — 数据类型、运算符、控制流、数组、方法
+- [[JAVA/Java-面向对象]] — 封装/继承/多态/抽象、接口、构造器、设计原则
+- [[JAVA/Java-集合框架]] — Collection/Map 体系、HashMap、HashSet
+- [[JAVA/Java-泛型与反射]] — 泛型、反射
+- [[JAVA/Java-多线程与JVM]] — 多线程、锁、JVM
+- [[JAVA/Java-高级API]] — Lambda/Stream、IO 流、JDBC、异常
 
 ## 第三阶段：数据库
 

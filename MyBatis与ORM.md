@@ -40,7 +40,7 @@ SSH（struts2 + spring + hibernate）
 
 ## 相关笔记
 
-- [[Spring-IoC-DI]] — MyBatis 如何被 Spring 管理
-- [[Spring-Boot]] — Spring Boot + MyBatis 集成
+- [[JAVA/Spring-IoC-DI]] — MyBatis 如何被 Spring 管理
+- [[JAVA/Spring-Boot]] — Spring Boot + MyBatis 集成
 - [[MySQL-核心基础]] — SQL 语法基础
 - [[MySQL-高级]] — 索引与事务管理

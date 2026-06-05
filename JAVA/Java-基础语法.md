@@ -562,7 +562,7 @@ public class Student {
 
 ---
 
-## [JDK / JRE / JVM](Java-多线程与JVM.md)
+## [JDK / JRE / JVM](JAVA/Java-多线程与JVM.md)
 
 - **JVM**（Java Virtual Machine）：对接各大 OS 平台
 - **JRE**（Java Runtime Environment）：提供运行环境
@@ -611,7 +611,7 @@ CLASSPATH = .;
 
 - [[Java-面向对象]] — 封装、继承、多态、抽象
 - [[Java-集合框架]] — Collection / Map 体系
-- [[Java-泛型与反射]] — 泛型与反射机制
-- [[Java-多线程与JVM]] — 并发编程与虚拟机
-- [[Java-高级API]] — Lambda、Stream、IO、JDBC
+- [[JAVA/Java-泛型与反射]] — 泛型与反射机制
+- [[JAVA/Java-多线程与JVM]] — 并发编程与虚拟机
+- [[JAVA/Java-高级API]] — Lambda、Stream、IO、JDBC
 - [[注解速查表]] — 所有注解的大白话解释

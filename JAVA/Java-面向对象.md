@@ -216,7 +216,7 @@ public class Duck extends Animal implements Flyable, Swimable {
 
 ---
 
-## 重写（Override）vs[方法重载（Overload）](Java-基础语法.md#方法重载（Overload）) 
+## 重写（Override）vs[方法重载（Overload）](JAVA/Java-基础语法.md#方法重载（Overload）) 
 
 | 特性 | 重写（Override） | 重载（Overload） |
 |------|-----------------|-----------------|
@@ -445,12 +445,12 @@ Student s1 = new Student();              // 无参
 Student s2 = new Student("小明", 20);    // 有参
 ```
 
-## [类的加载](Java-多线程与JVM.md)
+## [类的加载](JAVA/Java-多线程与JVM.md)
 
 - 每个类只加载 1 次
 - 静态成员在类加载期间就准备好，实例成员在运行期间创建
 
-> 详见 [[Java-多线程与JVM]] 的 JVM 类加载部分
+> 详见 [[JAVA/Java-多线程与JVM]] 的 JVM 类加载部分
 
 ---
 
@@ -531,7 +531,7 @@ Student s2 = new Student("小明", 20);    // 有参
 
 ---
 
-## [equals() & hashCode() 联合判重](Java-集合框架.md)
+## [equals() & hashCode() 联合判重](JAVA/Java-集合框架.md)
 
 1. 先判 `hashCode()`（性能好，做快筛）→ 不同则直接判定不同
 2. hashCode 相同 → `equals()` 做最终判断（性能不好但准确）
@@ -564,7 +564,7 @@ System.out.println(s1.equals(s2));     // true（内容相同）
 System.out.println(s1.hashCode() == s2.hashCode());  // true
 ```
 
-## [比较器（Comparator）](Java-集合框架.md)
+## [比较器（Comparator）](JAVA/Java-集合框架.md)
 
 - 比较器内部封装了基础排序算法（两两比对）
 - 重写 `compare()` 方法专注于多字段排序业务
@@ -603,8 +603,8 @@ Twitter 提出的分布式唯一 ID 生成算法：
 
 ## 相关笔记
 
-- [[Java-基础语法]] — 数据类型、运算符、控制流
-- [[Java-集合框架]] — Collection / Map 体系
-- [[Java-泛型与反射]] — 泛型与反射机制
-- [[Java-高级API]] — Lambda、Stream、IO、JDBC
+- [[JAVA/Java-基础语法]] — 数据类型、运算符、控制流
+- [[JAVA/Java-集合框架]] — Collection / Map 体系
+- [[JAVA/Java-泛型与反射]] — 泛型与反射机制
+- [[JAVA/Java-高级API]] — Lambda、Stream、IO、JDBC
 - [[注解速查表]] — 所有注解的大白话解释

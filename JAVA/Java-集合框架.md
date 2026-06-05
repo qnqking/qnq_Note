@@ -156,7 +156,7 @@ for (Map.Entry<String, Integer> entry : map.entrySet()) {
 
 ---
 
-## [红黑树规则](Java-高级API.md)
+## [红黑树规则](JAVA/Java-高级API.md)
 
 1. 所有节点要么红，要么黑
 2. 根节点一定是黑
@@ -166,7 +166,7 @@ for (Map.Entry<String, Integer> entry : map.entrySet()) {
 
 ---
 
-## [线程安全 vs 非安全](Java-多线程与JVM.md)
+## [线程安全 vs 非安全](JAVA/Java-多线程与JVM.md)
 
 - **线程安全**：同一时刻只能有 1 根线程操作数据 → 效率低，数据一致性有保证
 - **线程非安全**：允许多根线程同时操作 → 效率高，数据可能无法保证一致性
@@ -197,7 +197,7 @@ while (it.hasNext()) {
 
 ## 相关笔记
 
-- [[Java-基础语法]] — 数据类型、运算符、控制流
+- [[JAVA/Java-基础语法]] — 数据类型、运算符、控制流
 - [[Java-面向对象]] — 封装、继承、多态、抽象
-- [[Java-泛型与反射]] — 泛型与反射机制
-- [[Java-多线程与JVM]] — 线程安全底层原理
+- [[JAVA/Java-泛型与反射]] — 泛型与反射机制
+- [[JAVA/Java-多线程与JVM]] — 线程安全底层原理

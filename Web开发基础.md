@@ -177,6 +177,6 @@ public class LoginServlet extends HttpServlet { ... }
 ## 相关笔记
 
 - [[计算机网络]] — HTTP 协议详解
-- [[Spring-MVC]] — Spring MVC 实现 RESTful API
-- [[Spring-Boot]] — 内嵌 Tomcat 自动配置
+- [[JAVA/Spring-MVC]] — Spring MVC 实现 RESTful API
+- [[JAVA/Spring-Boot]] — 内嵌 Tomcat 自动配置
 - [[架构与安全]] — SSM 组合、安全认证

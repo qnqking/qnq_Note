@@ -107,5 +107,5 @@ method.invoke(obj, "Hello World");   // 等价于 obj.say("Hello World")
 ## 相关笔记
 
 - [[Java-面向对象]] — 类加载机制
-- [[Java-多线程与JVM]] — JVM 方法区
+- [[JAVA/Java-多线程与JVM]] — JVM 方法区
 - [[Java-集合框架]] — 泛型在集合中的使用

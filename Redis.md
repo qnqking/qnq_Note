@@ -78,4 +78,4 @@
 
 - [[MySQL-高级]] — 数据库层面的数据管理
 - [[架构与安全]] — Spring Boot + Redis 集成
-- [[Spring-Boot]] — 自动配置 Redis
+- [[JAVA/Spring-Boot]] — 自动配置 Redis

@@ -73,6 +73,6 @@ Spring Boot 是 Spring 生态的快速开发框架，核心是「约定大于配
 
 - [[Spring-IoC-DI]] — 控制反转与依赖注入
 - [[Spring-MVC]] — RESTful Web API
-- [[Spring-AOP]] — 面向切面编程
+- [[JAVA/Spring-AOP]] — 面向切面编程
 - [[MyBatis与ORM]] — ORM 框架集成
 - [[注解速查表]] — Spring Boot 相关注解
