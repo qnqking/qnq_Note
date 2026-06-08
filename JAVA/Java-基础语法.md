@@ -35,6 +35,93 @@
 
 解决基本类型无法参与面向对象操作（如集合），提供工具方法。
 
+### 基本类型转换
+
+#### 自动类型转换（隐式 / Widening）
+
+小范围类型 → 大范围类型，自动发生，不会丢失数据。
+
+```
+byte → short → int → long → float → double
+       char  ↗
+```
+
+> `char` 和 `short` 都是 2 字节，但 `char` 是无符号的（0~65535），`short` 有符号（-32768~32767），两者不能互相自动转换。
+
+```java
+byte b = 10;
+short s = b;      // ✅ byte → short
+int i = s;        // ✅ short → int
+long l = i;       // ✅ int → long
+float f = l;      // ✅ long → float（可能丢失精度，见下文）
+double d = f;     // ✅ float → double
+
+char c = 'A';
+int code = c;     // ✅ char → int，code = 65（Unicode 码点）
+```
+
+**注意**：`long`（8 字节）→ `float`（4 字节）是自动的，但因为 `float` 用科学计数法表示，范围比 `long` 大。不过**精度会丢失**——`float` 只有约 7 位有效数字。
+
+```java
+long bigNum = 123456789012345L;
+float f = bigNum;  // ✅ 编译通过，但 f 的值是 1.2345679E14，末尾丢失了精度
+```
+
+#### 强制类型转换（显式 / Narrowing）
+
+大范围类型 → 小范围类型，需要手动 `(类型)` 强转，**可能丢失数据**。
+
+```java
+double d = 9.78;
+int i = (int) d;       // i = 9，小数被截断（不是四舍五入）
+
+int big = 300;
+byte small = (byte) big;  // small = 44，高位被截断，溢出
+
+long l = 100L;
+int n = (int) l;       // 安全，100 在 int 范围内
+```
+
+**溢出原理**：`300` 的二进制 `1 0010 1100`，byte 只取低 8 位 `0010 1100` = 44。
+
+#### 表达式中的自动提升
+
+在表达式中，`byte` / `short` / `char` 会**自动提升为 `int`** 再参与运算：
+
+```java
+byte a = 10;
+byte b = 20;
+// byte c = a + b;    // ❌ 编译错误，a + b 结果是 int
+int c = a + b;        // ✅ 正确
+byte d = (byte)(a + b); // 强转回 byte
+
+char c1 = 'A';
+char c2 = 'B';
+int sum = c1 + c2;    // 65 + 66 = 131，char 运算自动提升为 int
+```
+
+#### 常量优化
+
+如果赋值的是**编译期常量**且在目标范围内，不会报错：
+
+```java
+byte b = 10;           // ✅ 10 是常量，在 byte 范围内
+// byte b2 = 128;      // ❌ 超出范围
+
+final int x = 10;
+byte b3 = x;           // ✅ x 是 final 常量，编译期确定
+```
+
+#### 转换规则总结
+
+| 转换方向 | 方式 | 风险 |
+|----------|------|------|
+| 小 → 大（如 `int` → `long`） | 自动 | 无 |
+| 整数 → 浮点（如 `long` → `float`） | 自动 | 可能丢精度 |
+| 大 → 小（如 `double` → `int`） | 强转 `(int)` | 截断/溢出 |
+| 浮点 → 整数（如 `double` → `int`） | 强转 `(int)` | 截断小数 |
+| `byte`/`short`/`char` 运算 | 自动提升为 `int` | 需强转回去 |
+
 ---
 
 ## String 系列
