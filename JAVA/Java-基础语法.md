@@ -558,6 +558,39 @@ Character.isUpperCase('A');            // true
 Character.isWhitespace(' ');           // true
 ```
 
+#### String ↔ char[]
+
+```java
+// String → char[]
+char[] chars = "hello".toCharArray();     // ['h','e','l','l','o']
+
+// char[] → String
+String s1 = new String(chars);
+String s2 = String.valueOf(chars);
+```
+
+#### String ↔ byte[]（编码/解码）
+
+```java
+// String → byte[]（编码：字符串→字节）
+byte[] utf8 = "你好".getBytes();                  // 默认 UTF-8
+byte[] gbk  = "你好".getBytes("GBK");             // 指定编码
+
+// byte[] → String（解码：字节→字符串）
+String a = new String(utf8);                      // UTF-8 解码
+String b = new String(gbk, "GBK");                // 指定 GBK 解码
+```
+
+> 编码和解码必须用同一字符集，否则乱码。
+
+#### StringBuilder → String
+
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("hello").append(" world");
+String result = sb.toString();      // "hello world"
+```
+
 ### Math 数学运算
 
 ```java
